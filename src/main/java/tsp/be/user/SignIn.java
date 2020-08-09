@@ -11,6 +11,8 @@ import tsp.be.user.auth.TokenManager;
 import tsp.be.user.models.User;
 import tsp.be.user.models.UserRepository;
 
+import static tsp.be.user.MetaData.USER_MODULE;
+
 class SignInRequest {
     public String email;
     public String password;
@@ -31,7 +33,7 @@ public class SignIn {
     private TokenManager tokenManager = TokenManager.getInstance();
 
     @SigninNotRequired
-    @RequestMapping(value = "user/sign-in", method = RequestMethod.POST)
+    @RequestMapping(value = USER_MODULE + "/sign-in", method = RequestMethod.POST)
     public SignInResponse signIn(@RequestBody SignInRequest signIn) {
         validate(signIn);
         SignInResponse response = manageSignIn(signIn);
