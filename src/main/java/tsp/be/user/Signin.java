@@ -31,14 +31,14 @@ public class Signin {
     private TokenManager tokenManager = TokenManager.getInstance();
 
     @SigninNotRequired
-    @RequestMapping(value = "/signin", method = RequestMethod.POST)
-    public SigninResponse signin(@RequestBody SigninRequest signin) {
+    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
+    public SigninResponse signIn(@RequestBody SigninRequest signin) {
         validate(signin);
         SigninResponse response = manageSignin(signin);
         return response;
     }
 
-    private void validate(SigninRequest signin) {
+    private void validate(SigninRequest signIn) {
 
     }
 
