@@ -10,33 +10,33 @@ import tsp.be.error.SimpleValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.models.UserRepository;
 
-class SignupRequest {
+class SignUpRequest {
     public String name;
     public String email;
     public String password;
 }
 
-class SignupResponse {
+class SignUpResponse {
     public String message;
 }
 
 @RestController
-public class Signup {
+public class SignUp {
     @Autowired
     private UserRepository userRepository;
 
     @SigninNotRequired
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public SignupResponse signup(@RequestBody SignupRequest signup) {
+    @RequestMapping(value = "user/sign-up", method = RequestMethod.POST)
+    public SignUpResponse signUp(@RequestBody SignUpRequest signup) {
         validate(signup);
         userRepository.createUser(signup.name, signup.email, signup.password);
 
-        SignupResponse response = new SignupResponse();
+        SignUpResponse response = new SignUpResponse();
         response.message = "Signup Success";
         return response;
     }
 
-    private void validate(SignupRequest signup) {
+    private void validate(SignUpRequest signup) {
         if (signup == null) throw new SimpleValidationException("No signup data provided");
 
         MappedValidationException mappedValidationException = new MappedValidationException();

@@ -11,12 +11,12 @@ import tsp.be.user.auth.TokenManager;
 import tsp.be.user.models.User;
 import tsp.be.user.models.UserRepository;
 
-class SigninRequest {
+class SignInRequest {
     public String email;
     public String password;
 }
 
-class SigninResponse {
+class SignInResponse {
     public String message;
     public String token;
     public String userID;
@@ -24,32 +24,32 @@ class SigninResponse {
 }
 
 @RestController
-public class Signin {
+public class SignIn {
 
     @Autowired
     private UserRepository userRepository;
     private TokenManager tokenManager = TokenManager.getInstance();
 
     @SigninNotRequired
-    @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
-    public SigninResponse signIn(@RequestBody SigninRequest signin) {
-        validate(signin);
-        SigninResponse response = manageSignin(signin);
+    @RequestMapping(value = "user/sign-in", method = RequestMethod.POST)
+    public SignInResponse signIn(@RequestBody SignInRequest signIn) {
+        validate(signIn);
+        SignInResponse response = manageSignIn(signIn);
         return response;
     }
 
-    private void validate(SigninRequest signIn) {
+    private void validate(SignInRequest signIn) {
 
     }
 
-    private SigninResponse manageSignin(SigninRequest signin) {
-        User user = userRepository.getUserByEmail(signin.email);
-        if (user == null || !user.password.equals(signin.password)) throw new SimpleValidationException("Email & password does not match any account");
+    private SignInResponse manageSignIn(SignInRequest signIn) {
+        User user = userRepository.getUserByEmail(signIn.email);
+        if (user == null || !user.password.equals(signIn.password)) throw new SimpleValidationException("Email & password does not match any account");
 
         String token = tokenManager.generateToken(user.id, user.name, user.email);
 
-        SigninResponse response = new SigninResponse();
-        response.message = "Signin successful";
+        SignInResponse response = new SignInResponse();
+        response.message = "Sign in successful";
         response.token = token;
         response.userID = user.id;
         response.userName = user.name;
