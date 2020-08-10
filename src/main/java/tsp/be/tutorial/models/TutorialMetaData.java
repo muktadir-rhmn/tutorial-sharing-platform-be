@@ -5,4 +5,7 @@ public class TutorialMetaData {
 	public String name;
 	public String description;
 
+	public String authorID;
+	public String authorName;
+
 }

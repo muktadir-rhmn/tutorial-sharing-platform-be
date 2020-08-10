@@ -60,7 +60,7 @@ public class TutorialsRepository {
 
 	public List<TutorialMetaData> getTutorials(String categoryID) {
 		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("categoryID", new ObjectId(categoryID)))
-				.projection(Projections.include("_id", "name", "description"));
+				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {
@@ -68,6 +68,8 @@ public class TutorialsRepository {
 			tutorial.id = tutorialDoc.getObjectId("_id").toString();
 			tutorial.name = tutorialDoc.getString("name");
 			tutorial.description = tutorialDoc.getString("description");
+			tutorial.authorID = tutorialDoc.getString("authorID");
+			tutorial.authorName = tutorialDoc.getString("authorName");
 
 			tutorials.add(tutorial);
 		}

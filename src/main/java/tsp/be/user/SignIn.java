@@ -49,7 +49,7 @@ public class SignIn {
         User user = userRepository.getUserByEmail(signIn.email);
         if (user == null || !user.password.equals(signIn.password)) throw new SimpleValidationException("Email & password does not match any account");
 
-        String token = tokenManager.generateToken(user.id, user.name, user.email);
+        String token = tokenManager.generateToken(user.id, user.email, user.name);
 
         SignInResponse response = new SignInResponse();
         response.message = "Sign in successful";
