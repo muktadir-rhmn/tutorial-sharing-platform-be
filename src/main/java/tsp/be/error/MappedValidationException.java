@@ -15,11 +15,7 @@ public class MappedValidationException extends ValidationException {
         map.put(fieldName, errorMessage);
     }
 
-    private boolean isEmpty() {
-        return map.isEmpty();
-    }
-
     public void throwIfAnyError() {
-        if (!isEmpty()) throw this;
+        if (!map.isEmpty()) throw this;
     }
 }

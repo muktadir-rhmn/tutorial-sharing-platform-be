@@ -8,8 +8,6 @@ import tsp.be.error.MappedValidationException;
 import tsp.be.lesson.models.LessonsRepository;
 import tsp.be.utils.Validator;
 
-import java.util.Map;
-
 import static tsp.be.lesson.MetaData.LESSON_ROOT_PATH;
 
 class AddLessonRequest {

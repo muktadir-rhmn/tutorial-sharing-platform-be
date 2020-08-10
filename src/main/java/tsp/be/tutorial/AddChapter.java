@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tsp.be.error.MappedValidationException;
 import tsp.be.tutorial.models.TutorialsRepository;
+import tsp.be.utils.Validator;
 
 import static tsp.be.tutorial.MetaData.TUTORIAL_ROOT_PATH;
 
@@ -35,7 +36,7 @@ public class AddChapter {
 		MappedValidationException errors = new MappedValidationException();
 
 		//todo: validate tutorialID exists
-		if (request.name == null || request.name.equals("")) errors.addError("name", "You must provide a chapter name");
+		if (Validator.isEmptyString(request.name)) errors.addError("name", "Chapter name is required");
 
 		errors.throwIfAnyError();
 	}

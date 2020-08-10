@@ -9,6 +9,7 @@ import tsp.be.error.MappedValidationException;
 import tsp.be.error.SimpleValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.models.UserRepository;
+import tsp.be.utils.Validator;
 
 import static tsp.be.user.MetaData.USER_MODULE_URL_PREFIX;
 
@@ -38,14 +39,12 @@ public class SignUp {
         return response;
     }
 
-    private void validate(SignUpRequest signUp) {
-        if (signUp == null) throw new SimpleValidationException("No signUp data provided");
-
+    private void validate(SignUpRequest request) {
         MappedValidationException errors = new MappedValidationException();
 
-        if (signUp.email == null || signUp.email.length() == 0) errors.addError("email", "You must put email address");
-        if (signUp.name == null || signUp.name.length() == 0) errors.addError("name", "You must give a user name");
-        if (signUp.password == null || signUp.password.length() < 8) errors.addError("password", "Password must conatain at least 8 characters");
+        if (Validator.isEmptyString(request.email)) errors.addError("email", "Email is required");
+        if (Validator.isEmptyString(request.name)) errors.addError("name", "User name is required");
+        if (request.password == null || request.password.length() < 8) errors.addError("password", "Password must contain at least 8 characters");
 
         errors.throwIfAnyError();
     }

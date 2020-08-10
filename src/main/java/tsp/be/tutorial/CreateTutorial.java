@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tsp.be.error.MappedValidationException;
 import tsp.be.tutorial.models.TutorialsRepository;
 import tsp.be.user.UserDescriptor;
+import tsp.be.utils.Validator;
 
 import static tsp.be.tutorial.MetaData.TUTORIAL_ROOT_PATH;
 
@@ -40,8 +41,8 @@ public class CreateTutorial {
 	private void validate(CreateTutorialRequest request) {
 		MappedValidationException errors = new MappedValidationException();
 
-		if (request.name == null || request.name.equals("")) errors.addError("name", "You must enter a name");
-		if (request.categoryID == null || request.categoryID.equals("") ) errors.addError("categoryID", "You must select a category");
+		if (Validator.isEmptyString(request.name)) errors.addError("name", "Name is required");
+		if (Validator.isEmptyString(request.categoryID)) errors.addError("categoryID", "Category is required");
 		//todo: check whether the categoryID exists or not
 
 		errors.throwIfAnyError();
