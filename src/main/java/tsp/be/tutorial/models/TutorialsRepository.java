@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,5 +119,18 @@ public class TutorialsRepository {
 			lessons.add(lesson);
 		}
 		return lessons;
+	}
+
+	public void addLesson(String tutorialID, String chapterID, String lessonID, String name) {
+		Document lessonMetaData = new Document();
+		lessonMetaData.append("_id", new ObjectId(lessonID));
+		lessonMetaData.append("name", name);
+
+		UpdateResult result = tutorialsCollection.updateOne(
+				Filters.and(Filters.eq("_id", new ObjectId(tutorialID)), Filters.eq("chapters._id", new ObjectId(chapterID))),
+				Updates.push("chapters.$.lessons", lessonMetaData)
+		);
+
+		if(result.getModifiedCount() == 0)  throw new SimpleValidationException("Invalid tutorial and chapter");
 	}
 }

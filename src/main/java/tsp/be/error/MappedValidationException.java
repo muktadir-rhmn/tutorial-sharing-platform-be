@@ -11,7 +11,7 @@ public class MappedValidationException extends ValidationException {
         return map;
     }
 
-    public void put(String fieldName, String errorMessage) {
+    public void addError(String fieldName, String errorMessage) {
         map.put(fieldName, errorMessage);
     }
 

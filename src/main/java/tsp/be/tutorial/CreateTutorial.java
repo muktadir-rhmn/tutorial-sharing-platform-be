@@ -40,8 +40,8 @@ public class CreateTutorial {
 	private void validate(CreateTutorialRequest request) {
 		MappedValidationException errors = new MappedValidationException();
 
-		if (request.name == null || request.name.equals("")) errors.put("name", "You must enter a name");
-		if (request.categoryID == null || request.categoryID.equals("") ) errors.put("categoryID", "You must select a category");
+		if (request.name == null || request.name.equals("")) errors.addError("name", "You must enter a name");
+		if (request.categoryID == null || request.categoryID.equals("") ) errors.addError("categoryID", "You must select a category");
 		//todo: check whether the categoryID exists or not
 
 		errors.throwIfAnyError();

@@ -35,7 +35,7 @@ public class AddChapter {
 		MappedValidationException errors = new MappedValidationException();
 
 		//todo: validate tutorialID exists
-		if (request.name == null || request.name.equals("")) errors.put("name", "You must provide a chapter name");
+		if (request.name == null || request.name.equals("")) errors.addError("name", "You must provide a chapter name");
 
 		errors.throwIfAnyError();
 	}

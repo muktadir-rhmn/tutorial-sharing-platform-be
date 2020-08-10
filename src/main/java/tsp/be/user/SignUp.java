@@ -43,9 +43,9 @@ public class SignUp {
 
         MappedValidationException errors = new MappedValidationException();
 
-        if (signUp.email == null || signUp.email.length() == 0) errors.put("email", "You must put email address");
-        if (signUp.name == null || signUp.name.length() == 0) errors.put("name", "You must give a user name");
-        if (signUp.password == null || signUp.password.length() < 8) errors.put("password", "Password must conatain at least 8 characters");
+        if (signUp.email == null || signUp.email.length() == 0) errors.addError("email", "You must put email address");
+        if (signUp.name == null || signUp.name.length() == 0) errors.addError("name", "You must give a user name");
+        if (signUp.password == null || signUp.password.length() < 8) errors.addError("password", "Password must conatain at least 8 characters");
 
         errors.throwIfAnyError();
     }
