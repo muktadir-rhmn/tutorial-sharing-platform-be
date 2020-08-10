@@ -78,7 +78,7 @@ public class TutorialsRepository {
 		return tutorials;
 	}
 
-	public Tutorial getATutorial(String tutorialID) {
+	public Tutorial getTutorialContents(String tutorialID) {
 		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", new ObjectId(tutorialID))).first();
 		if (tutorialDoc == null) throw new SimpleValidationException("Tutorial not found");
 

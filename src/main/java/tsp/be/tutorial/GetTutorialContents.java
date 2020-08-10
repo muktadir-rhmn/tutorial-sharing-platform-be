@@ -16,6 +16,6 @@ public class GetTutorialContents {
 
 	@GetMapping(TUTORIAL_ROOT_PATH + "/{tutorialID}")
 	public Tutorial getTutorialDetails(@PathVariable String tutorialID) {
-		return tutorialsRepository.getATutorial(tutorialID);
+		return tutorialsRepository.getTutorialContents(tutorialID);
 	}
 }
