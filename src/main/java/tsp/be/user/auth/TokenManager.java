@@ -58,7 +58,7 @@ public class TokenManager {
 
             DecodedJWT decodedToken = tokenVerifier.verify(token);
             Map<String, Claim> claimMap = decodedToken.getClaims();
-            long userID = claimMap.get("userID").asLong();
+            String userID = claimMap.get("userID").asString();
             String userEmail = claimMap.get("userEmail").asString();
             String userName = claimMap.get("userName").asString();
 
