@@ -7,5 +7,4 @@ public class TutorialMetaData {
 
 	public String authorID;
 	public String authorName;
-
 }

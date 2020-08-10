@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DatabaseManager;
+import tsp.be.error.SimpleValidationException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,5 +76,47 @@ public class TutorialsRepository {
 		}
 
 		return tutorials;
+	}
+
+	public Tutorial getATutorial(String tutorialID) {
+		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", new ObjectId(tutorialID))).first();
+		if (tutorialDoc == null) throw new SimpleValidationException("Tutorial not found");
+
+		Tutorial tutorial = new Tutorial();
+		tutorial.id = tutorialDoc.getObjectId("_id").toString();
+		tutorial.name = tutorialDoc.getString("name");
+		tutorial.description = tutorialDoc.getString("description");
+		tutorial.authorID = tutorialDoc.getString("authorID");
+		tutorial.authorName = tutorialDoc.getString("authorName");
+		tutorial.chapters = extractChapters(tutorialDoc.getList("chapters", Document.class));
+
+		return tutorial;
+	}
+
+	private List<Chapter> extractChapters(List<Document> chapterDocs) {
+		List<Chapter> chapters = new ArrayList<>(chapterDocs.size());
+
+		for (Document chapterDoc: chapterDocs) {
+			Chapter chapter = new Chapter();
+
+			chapter.id = chapterDoc.getObjectId("_id").toString();
+			chapter.name = chapterDoc.getString("name");
+			chapter.lessons = extractLessons(chapterDoc.getList("lessons", Document.class));
+
+			chapters.add(chapter);
+		}
+		return chapters;
+	}
+
+	private List<LessonMetaData> extractLessons(List<Document> lessonDocs) {
+		List<LessonMetaData> lessons = new ArrayList<>(lessonDocs.size());
+		for (Document lessonDoc: lessonDocs) {
+			LessonMetaData lesson = new LessonMetaData();
+			lesson.id = lessonDoc.getObjectId("_id").toString();
+			lesson.name = lessonDoc.getString("name");
+
+			lessons.add(lesson);
+		}
+		return lessons;
 	}
 }
