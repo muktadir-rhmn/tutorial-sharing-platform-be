@@ -22,6 +22,7 @@ public class UserRepository {
 		user.append("email", email);
 		user.append("password", password);
 		user.append("createdAt", System.currentTimeMillis());
+		user.append("userType", User.USER_TYPE_MEMBER);
 
 		usersCollection.insertOne(user);
 	}
@@ -35,6 +36,7 @@ public class UserRepository {
 		user.email = userDoc.getString("email");
 		user.name = userDoc.getString("name");
 		user.password = userDoc.getString("password");
+		user.userType = userDoc.getString("userType");
 		user.createdAt = userDoc.getLong("createdAt");
 
 		return user;

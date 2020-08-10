@@ -11,7 +11,7 @@ import tsp.be.user.auth.TokenManager;
 import tsp.be.user.models.User;
 import tsp.be.user.models.UserRepository;
 
-import static tsp.be.user.MetaData.USER_MODULE;
+import static tsp.be.user.MetaData.USER_MODULE_URL_PREFIX;
 
 class SignInRequest {
     public String email;
@@ -21,6 +21,7 @@ class SignInRequest {
 class SignInResponse {
     public String message;
     public String token;
+    public String userType;
     public String userID;
     public String userName;
 }
@@ -33,7 +34,7 @@ public class SignIn {
     private TokenManager tokenManager = TokenManager.getInstance();
 
     @SigninNotRequired
-    @RequestMapping(value = USER_MODULE + "/sign-in", method = RequestMethod.POST)
+    @RequestMapping(value = USER_MODULE_URL_PREFIX + "/sign-in", method = RequestMethod.POST)
     public SignInResponse signIn(@RequestBody SignInRequest signIn) {
         validate(signIn);
         SignInResponse response = manageSignIn(signIn);
@@ -55,6 +56,7 @@ public class SignIn {
         response.token = token;
         response.userID = user.id;
         response.userName = user.name;
+        response.userType = user.userType;
 
         return response;
     }

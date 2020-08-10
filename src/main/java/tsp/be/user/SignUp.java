@@ -10,7 +10,7 @@ import tsp.be.error.SimpleValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.models.UserRepository;
 
-import static tsp.be.user.MetaData.USER_MODULE;
+import static tsp.be.user.MetaData.USER_MODULE_URL_PREFIX;
 
 class SignUpRequest {
     public String name;
@@ -28,13 +28,13 @@ public class SignUp {
     private UserRepository userRepository;
 
     @SigninNotRequired
-    @RequestMapping(value = USER_MODULE + "/sign-up", method = RequestMethod.POST)
+    @RequestMapping(value = USER_MODULE_URL_PREFIX + "/sign-up", method = RequestMethod.POST)
     public SignUpResponse signUp(@RequestBody SignUpRequest signUp) {
         validate(signUp);
         userRepository.createUser(signUp.name, signUp.email, signUp.password);
 
         SignUpResponse response = new SignUpResponse();
-        response.message = "Signup Success";
+        response.message = "Sign Up Success";
         return response;
     }
 
