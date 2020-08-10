@@ -2,13 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c12e7aca-dc0f-41bb-9f6b-e9c931be818b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/hierarchy/GetHierarchy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/hierarchy/models/Category.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/hierarchy/models/HierarchyRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/TutorialManagementSystemApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/TutorialSharingPlatformApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/MetaData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/MetaData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/SignIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/SignIn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/SignUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/SignUp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/models/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/models/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/models/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/models/UserRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,7 +30,9 @@
     </option>
   </component>
   <component name="ProjectId" id="1fZTQGIT9VTfRKds90aolHuwYnm" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -134,7 +133,8 @@
       <workItem from="1596988289378" duration="482000" />
       <workItem from="1596993845909" duration="852000" />
       <workItem from="1596997543110" duration="502000" />
-      <workItem from="1597039554988" duration="246000" />
+      <workItem from="1597039554988" duration="1163000" />
+      <workItem from="1597058451228" duration="1195000" />
     </task>
     <servers />
   </component>
@@ -162,45 +162,45 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1440.900@0.0.1440.900" timestamp="1596897611377" />
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1597000396868">
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom" timestamp="1597060665253">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597000396868" />
+    <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597060665253" />
     <state width="1398" height="245" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1596966795748" />
-    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1597000396864">
+    <state width="1398" height="245" key="GridCell.Tab.0.center" timestamp="1597060665252">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1597000396864" />
+    <state width="1398" height="245" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1597060665252" />
     <state width="1398" height="245" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1596966795747" />
-    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1597000396863">
+    <state width="1398" height="245" key="GridCell.Tab.0.left" timestamp="1597060665251">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1597000396863" />
+    <state width="1398" height="245" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1597060665251" />
     <state width="1398" height="245" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1596966795746" />
-    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1597000396867">
+    <state width="1398" height="245" key="GridCell.Tab.0.right" timestamp="1597060665252">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1597000396867" />
+    <state width="1398" height="245" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1597060665252" />
     <state width="1398" height="245" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1596966795747" />
-    <state width="1398" height="245" key="GridCell.Tab.1.bottom" timestamp="1597000396870">
+    <state width="1398" height="245" key="GridCell.Tab.1.bottom" timestamp="1597060665255">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597000396870" />
+    <state width="1398" height="245" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597060665255" />
     <state width="1398" height="245" key="GridCell.Tab.1.bottom/0.23.1440.797@0.23.1440.797" timestamp="1596966795750" />
-    <state width="1398" height="245" key="GridCell.Tab.1.center" timestamp="1597000396869">
+    <state width="1398" height="245" key="GridCell.Tab.1.center" timestamp="1597060665254">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1597000396869" />
+    <state width="1398" height="245" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1597060665254" />
     <state width="1398" height="245" key="GridCell.Tab.1.center/0.23.1440.797@0.23.1440.797" timestamp="1596966795749" />
-    <state width="1398" height="245" key="GridCell.Tab.1.left" timestamp="1597000396869">
+    <state width="1398" height="245" key="GridCell.Tab.1.left" timestamp="1597060665253">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1597000396869" />
+    <state width="1398" height="245" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1597060665253" />
     <state width="1398" height="245" key="GridCell.Tab.1.left/0.23.1440.797@0.23.1440.797" timestamp="1596966795748" />
-    <state width="1398" height="245" key="GridCell.Tab.1.right" timestamp="1597000396870">
+    <state width="1398" height="245" key="GridCell.Tab.1.right" timestamp="1597060665254">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="245" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1597000396870" />
+    <state width="1398" height="245" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1597060665254" />
     <state width="1398" height="245" key="GridCell.Tab.1.right/0.23.1440.797@0.23.1440.797" timestamp="1596966795750" />
     <state x="340" y="168" key="RollbackChangesDialog" timestamp="1596988446259">
       <screen x="0" y="0" width="1440" height="900" />
