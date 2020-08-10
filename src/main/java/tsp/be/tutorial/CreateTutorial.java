@@ -17,6 +17,10 @@ class CreateTutorialRequest {
 	public String categoryID;
 }
 
+class CreateTutorialResponse {
+	public String tutorialID;
+}
+
 @RestController
 public class CreateTutorial {
 
@@ -24,9 +28,13 @@ public class CreateTutorial {
 	private TutorialsRepository tutorialsRepository;
 
 	@PostMapping(TUTORIAL_ROOT_PATH + "/create")
-	public void createTutorial(@RequestAttribute("user") UserDescriptor userDescriptor, @RequestBody CreateTutorialRequest request) {
+	public CreateTutorialResponse createTutorial(@RequestAttribute("user") UserDescriptor userDescriptor, @RequestBody CreateTutorialRequest request) {
 		validate(request);
-		tutorialsRepository.createTutorial(userDescriptor.getUserID(), userDescriptor.getUserName(), request.name, request.description, request.categoryID);
+		String tutorialID = tutorialsRepository.createTutorial(userDescriptor.getUserID(), userDescriptor.getUserName(), request.name, request.description, request.categoryID);
+
+		CreateTutorialResponse response = new CreateTutorialResponse();
+		response.tutorialID = tutorialID;
+		return response;
 	}
 
 	private void validate(CreateTutorialRequest request) {
