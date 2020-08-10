@@ -38,15 +38,15 @@ public class SignUp {
         return response;
     }
 
-    private void validate(SignUpRequest signup) {
-        if (signup == null) throw new SimpleValidationException("No signup data provided");
+    private void validate(SignUpRequest signUp) {
+        if (signUp == null) throw new SimpleValidationException("No signUp data provided");
 
-        MappedValidationException mappedValidationException = new MappedValidationException();
+        MappedValidationException errors = new MappedValidationException();
 
-        if (signup.email == null || signup.email.length() == 0) mappedValidationException.put("email", "You must put email address");
-        if (signup.name == null || signup.name.length() == 0) mappedValidationException.put("name", "You must give a user name");
-        if (signup.password == null || signup.password.length() < 8) mappedValidationException.put("password", "Password must conatain at least 8 characters");
+        if (signUp.email == null || signUp.email.length() == 0) errors.put("email", "You must put email address");
+        if (signUp.name == null || signUp.name.length() == 0) errors.put("name", "You must give a user name");
+        if (signUp.password == null || signUp.password.length() < 8) errors.put("password", "Password must conatain at least 8 characters");
 
-        if (!mappedValidationException.isEmpty()) throw mappedValidationException;
+        errors.throwIfAnyError();
     }
 }

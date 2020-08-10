@@ -44,6 +44,6 @@ public class CreateTutorial {
 		if (request.categoryID == null || request.categoryID.equals("") ) errors.put("categoryID", "You must select a category");
 		//todo: check whether the categoryID exists or not
 
-		if (!errors.isEmpty()) throw errors;
+		errors.throwIfAnyError();
 	}
 }
