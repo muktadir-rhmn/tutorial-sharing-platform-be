@@ -1,7 +1,9 @@
 package tsp.be.tutorial.models;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -9,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DatabaseManager;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class TutorialsRepository {
@@ -52,5 +56,22 @@ public class TutorialsRepository {
 		);
 
 		return chapterID.toString();
+	}
+
+	public List<TutorialMetaData> getTutorials(String categoryID) {
+		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("categoryID", new ObjectId(categoryID)))
+				.projection(Projections.include("_id", "name", "description"));
+
+		List<TutorialMetaData> tutorials = new ArrayList<>();
+		for(Document tutorialDoc: tutorialDocs) {
+			TutorialMetaData tutorial = new TutorialMetaData();
+			tutorial.id = tutorialDoc.getObjectId("_id").toString();
+			tutorial.name = tutorialDoc.getString("name");
+			tutorial.description = tutorialDoc.getString("description");
+
+			tutorials.add(tutorial);
+		}
+
+		return tutorials;
 	}
 }
