@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tsp.be.db.DBValidator;
 import tsp.be.db.DatabaseManager;
 import tsp.be.error.DataIntegrityValidationException;
 import tsp.be.error.SingleMessageValidationException;
@@ -47,12 +48,12 @@ public class LessonsRepository {
 
 	//todo: make it transactional
 	public void updateLesson(String lessonID, String name, String body) {
-		if (!ObjectId.isValid(lessonID)) throw new DataIntegrityValidationException("Lesson does not exists");
+		DBValidator.validateObjectID("Lesson", lessonID);
 
 		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", lessonID))
 				.projection(Projections.include("tutorialID", "chapterID"))
 				.first();
-		if (lessonDoc == null) throw new DataIntegrityValidationException("Lesson does not exists");
+		DBValidator.validateNotNull("Lesson", lessonDoc);
 
 		lessonsCollection.updateOne(
 				Filters.eq("_id", lessonID),
@@ -67,5 +68,23 @@ public class LessonsRepository {
 		String chapterID = lessonDoc.getObjectId("chapterID").toString();
 
 		lessonDeNormalizationHandler.updateLesson(tutorialID, chapterID, lessonID, name);
+	}
+
+	public Lesson getLesson(String lessonID) {
+		DBValidator.validateObjectID("Lesson", lessonID);
+
+		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", new ObjectId(lessonID))).first();
+		DBValidator.validateNotNull("Lesson", lessonDoc);
+
+		Lesson lesson = new Lesson();
+		lesson.id = lessonDoc.getObjectId("_id").toString();
+		lesson.tutorialID = lessonDoc.getObjectId("tutorialID").toString();
+		lesson.chapterID = lessonDoc.getObjectId("chapterID").toString();
+		lesson.name = lessonDoc.getString("name");
+		lesson.body = lessonDoc.getString("body");
+		lesson.createdAt = lessonDoc.getLong("createdAt");
+		lesson.updatedAt = lessonDoc.getLong("updatedAt");
+
+		return lesson;
 	}
 }
