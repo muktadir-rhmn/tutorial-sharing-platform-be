@@ -37,7 +37,7 @@ public class TutorialsRepository {
 		tutorialDoc.append("name", name);
 		tutorialDoc.append("description", description);
 		tutorialDoc.append("categoryID", new ObjectId(categoryID));
-		tutorialDoc.append("authorID", authorID);
+		tutorialDoc.append("authorID", new ObjectId(authorID));
 		tutorialDoc.append("authorName", authorName);
 		tutorialDoc.append("chapters", Collections.emptyList());
 
@@ -68,17 +68,38 @@ public class TutorialsRepository {
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {
-			TutorialMetaData tutorial = new TutorialMetaData();
-			tutorial.id = tutorialDoc.getObjectId("_id").toString();
-			tutorial.name = tutorialDoc.getString("name");
-			tutorial.description = tutorialDoc.getString("description");
-			tutorial.authorID = tutorialDoc.getString("authorID");
-			tutorial.authorName = tutorialDoc.getString("authorName");
+			TutorialMetaData tutorial = tutorialDocToTutorialMetaData(tutorialDoc);
 
 			tutorials.add(tutorial);
 		}
 
 		return tutorials;
+	}
+
+	public List<TutorialMetaData> getTutorialsOfUser(String userID) {
+		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("authorID", new ObjectId(userID)))
+				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
+
+		List<TutorialMetaData> tutorials = new ArrayList<>();
+		for(Document tutorialDoc: tutorialDocs) {
+			System.out.println(tutorialDoc);
+			TutorialMetaData tutorial = tutorialDocToTutorialMetaData(tutorialDoc);
+
+			tutorials.add(tutorial);
+		}
+
+		return tutorials;
+	}
+
+	private TutorialMetaData tutorialDocToTutorialMetaData(Document tutorialDoc) {
+		TutorialMetaData tutorial = new TutorialMetaData();
+		tutorial.id = tutorialDoc.getObjectId("_id").toString();
+		tutorial.name = tutorialDoc.getString("name");
+		tutorial.description = tutorialDoc.getString("description");
+		tutorial.authorID = tutorialDoc.getObjectId("authorID").toString();
+		tutorial.authorName = tutorialDoc.getString("authorName");
+
+		return tutorial;
 	}
 
 	public Tutorial getTutorialContents(String tutorialID) {
@@ -89,7 +110,7 @@ public class TutorialsRepository {
 		tutorial.id = tutorialDoc.getObjectId("_id").toString();
 		tutorial.name = tutorialDoc.getString("name");
 		tutorial.description = tutorialDoc.getString("description");
-		tutorial.authorID = tutorialDoc.getString("authorID");
+		tutorial.authorID = tutorialDoc.getObjectId("authorID").toString();
 		tutorial.authorName = tutorialDoc.getString("authorName");
 		tutorial.chapters = extractChapters(tutorialDoc.getList("chapters", Document.class));
 

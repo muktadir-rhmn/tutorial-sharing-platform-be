@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tsp.be.tutorial.models.TutorialMetaData;
 import tsp.be.tutorial.models.TutorialsRepository;
+import tsp.be.user.auth.SigninNotRequired;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class GetTutorials {
 	@Autowired
 	private TutorialsRepository tutorialsRepository;
 
+	@SigninNotRequired
 	@GetMapping(TUTORIAL_ROOT_PATH)
 	public GetTutorialsResponse getTutorials(@RequestParam("categoryID") String categoryID) {
 		GetTutorialsResponse response = new GetTutorialsResponse();
