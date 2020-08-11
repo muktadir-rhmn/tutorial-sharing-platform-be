@@ -4,7 +4,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,7 @@ public class LessonsRepository {
 		lessonsCollection = databaseManager.getCollection(LESSONS_COLLECTION_NAME);
 	}
 
+	//todo: make it transactional
 	public String addLesson(String tutorialID, String chapterID, String name, String body) {
 		ObjectId lessonID = new ObjectId();
 
@@ -54,7 +54,11 @@ public class LessonsRepository {
 
 		lessonsCollection.updateOne(
 				Filters.eq("_id", lessonObjectID),
-				Updates.combine(Updates.set("name", name), Updates.set("body", body), Updates.set("updatedAt", System.currentTimeMillis()))
+				Updates.combine(
+						Updates.set("name", name),
+						Updates.set("body", body),
+						Updates.set("updatedAt", System.currentTimeMillis())
+				)
 		);
 
 		String tutorialID = lessonDoc.getObjectId("tutorialID").toString();
