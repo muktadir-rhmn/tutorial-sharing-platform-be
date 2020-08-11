@@ -6,11 +6,11 @@ import tsp.be.tutorial.models.TutorialsRepository;
 
 @Service
 public class LessonDeNormalizationHandler {
+	/** Handles de-normalization of lesson name*/
 
 	@Autowired
 	private TutorialsRepository tutorialsRepository;
 
-	/** Handles de-normalization*/
 	public void addLesson(String tutorialID, String chapterID, String lessonID, String name) {
 		tutorialsRepository.addLesson(tutorialID, chapterID, lessonID, name);
 	}
