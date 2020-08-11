@@ -50,7 +50,7 @@ public class LessonsRepository {
 	public void updateLesson(String lessonID, String name, String body) {
 		DBValidator.validateObjectID("Lesson", lessonID);
 
-		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", lessonID))
+		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", new ObjectId(lessonID)))
 				.projection(Projections.include("tutorialID", "chapterID"))
 				.first();
 		DBValidator.validateNotNull("Lesson", lessonDoc);

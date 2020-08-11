@@ -1,10 +1,7 @@
 package tsp.be.lesson;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tsp.be.error.MappedValidationException;
 import tsp.be.lesson.models.LessonsRepository;
 import tsp.be.utils.SingleMessageResponse;
@@ -18,11 +15,12 @@ class UpdateLessonRequest {
 }
 
 @RestController
+@RequestMapping(LESSON_ROOT_PATH)
 public class UpdateLesson {
 	@Autowired
 	private LessonsRepository lessonsRepository;
 
-	@PutMapping(LESSON_ROOT_PATH + "/{lessonID}")
+	@PostMapping("/{lessonID}")
 	public SingleMessageResponse updateLesson(@PathVariable String lessonID, @RequestBody UpdateLessonRequest request) {
 		validate(request);
 
