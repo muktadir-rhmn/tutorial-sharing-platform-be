@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tsp.be.lesson.models.Lesson;
 import tsp.be.lesson.models.LessonsRepository;
+import tsp.be.user.auth.SigninNotRequired;
 
 import static tsp.be.lesson.MetaData.LESSON_ROOT_PATH;
 
@@ -16,6 +17,7 @@ public class GetLesson {
 	@Autowired
 	private LessonsRepository lessonsRepository;
 
+	@SigninNotRequired
 	@GetMapping("/{lessonID}")
 	public Lesson getLesson(@PathVariable String lessonID) {
 		return lessonsRepository.getLesson(lessonID);
