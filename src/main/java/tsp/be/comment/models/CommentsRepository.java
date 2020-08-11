@@ -43,9 +43,11 @@ public class CommentsRepository {
 
 	public List<Comment> getComments(String lessonID, Integer pageNo, Integer pageSize) {
 		FindIterable<Document> commentDocs = commentsCollection.find(Filters.eq("_id", new ObjectId(lessonID)))
-				.sort(Sorts.ascending("createdAt"))
-				.skip(pageNo * pageSize)
-				.limit(pageSize);
+				.sort(Sorts.ascending("createdAt"));
+
+		if (pageNo != null && pageSize != null){
+			commentDocs = commentDocs.skip(pageNo * pageSize).limit(pageSize);
+		}
 
 		List<Comment> comments = new ArrayList<>();
 		for(Document commentDoc: commentDocs) {
