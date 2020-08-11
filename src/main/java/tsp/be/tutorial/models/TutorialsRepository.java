@@ -4,9 +4,11 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
+import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -132,5 +134,17 @@ public class TutorialsRepository {
 		);
 
 		if(result.getModifiedCount() == 0)  throw new SimpleValidationException("Invalid tutorial and chapter");
+	}
+
+	public void updateLesson(String tutorialID, String chapterID, String lessonID, String name) {
+		List<Bson> arrayFilters = new ArrayList<>();
+		arrayFilters.add(Filters.eq("chapter._id", new ObjectId(chapterID)));
+		arrayFilters.add(Filters.eq("lesson._id", new ObjectId(lessonID)));
+
+		tutorialsCollection.updateOne(
+				Filters.eq("_id", new ObjectId(tutorialID)),
+				Updates.set("chapters.$[chapter].lessons.$[lesson].name", name),
+				new UpdateOptions().arrayFilters(arrayFilters)
+		);
 	}
 }

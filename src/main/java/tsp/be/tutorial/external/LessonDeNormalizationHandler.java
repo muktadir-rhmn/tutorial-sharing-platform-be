@@ -14,4 +14,8 @@ public class LessonDeNormalizationHandler {
 	public void addLesson(String tutorialID, String chapterID, String lessonID, String name) {
 		tutorialsRepository.addLesson(tutorialID, chapterID, lessonID, name);
 	}
+
+	public void updateLesson(String tutorialID, String chapterID, String lessonID, String name) {
+		tutorialsRepository.updateLesson(tutorialID, chapterID, lessonID, name);
+	}
 }
