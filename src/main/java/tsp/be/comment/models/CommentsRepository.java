@@ -1,11 +1,17 @@
 package tsp.be.comment.models;
 
+import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DatabaseManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentsRepository {
@@ -33,5 +39,32 @@ public class CommentsRepository {
 		commentsCollection.insertOne(commentDoc);
 
 		return commentIDObject.toString();
+	}
+
+	public List<Comment> getComments(String lessonID, Integer pageNo, Integer pageSize) {
+		FindIterable<Document> commentDocs = commentsCollection.find(Filters.eq("_id", new ObjectId(lessonID)))
+				.sort(Sorts.ascending("createdAt"))
+				.skip(pageNo * pageSize)
+				.limit(pageSize);
+
+		List<Comment> comments = new ArrayList<>();
+		for(Document commentDoc: commentDocs) {
+			Comment comment = new Comment();
+			comment.id = commentDoc.getObjectId("_id").toString();
+			comment.lessonID = commentDoc.getString("lessonID");
+			comment.commenterID = commentDoc.getString("commenterID");
+			comment.commenterName = commentDoc.getString("commenterName");
+			comment.body = commentDoc.getString("body");
+			comment.createdAt = commentDoc.getLong("createdAt");
+			comment.updatedAt = commentDoc.getLong("updatedAt");
+
+			comments.add(comment);
+		}
+
+		return comments;
+	}
+
+	public int countTotalComments(String lessonID) {
+		return (int) commentsCollection.countDocuments(Filters.eq("_id", new ObjectId(lessonID)));
 	}
 }
