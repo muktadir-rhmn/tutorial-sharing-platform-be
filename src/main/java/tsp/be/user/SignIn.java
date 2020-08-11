@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import tsp.be.error.SimpleValidationException;
+import tsp.be.error.SingleMessageValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.auth.TokenManager;
 import tsp.be.user.models.User;
@@ -47,7 +47,7 @@ public class SignIn {
 
     private SignInResponse manageSignIn(SignInRequest signIn) {
         User user = userRepository.getUserByEmail(signIn.email);
-        if (user == null || !user.password.equals(signIn.password)) throw new SimpleValidationException("Email & password does not match any account");
+        if (user == null || !user.password.equals(signIn.password)) throw new SingleMessageValidationException("Email & password does not match any account");
 
         String token = tokenManager.generateToken(user.id, user.email, user.name);
 

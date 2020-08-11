@@ -13,7 +13,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DatabaseManager;
-import tsp.be.error.SimpleValidationException;
+import tsp.be.error.SingleMessageValidationException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -83,7 +83,7 @@ public class TutorialsRepository {
 
 	public Tutorial getTutorialContents(String tutorialID) {
 		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", new ObjectId(tutorialID))).first();
-		if (tutorialDoc == null) throw new SimpleValidationException("Tutorial not found");
+		if (tutorialDoc == null) throw new SingleMessageValidationException("Tutorial not found");
 
 		Tutorial tutorial = new Tutorial();
 		tutorial.id = tutorialDoc.getObjectId("_id").toString();
@@ -133,7 +133,7 @@ public class TutorialsRepository {
 				Updates.push("chapters.$.lessons", lessonMetaData)
 		);
 
-		if(result.getModifiedCount() == 0)  throw new SimpleValidationException("Invalid tutorial and chapter");
+		if(result.getModifiedCount() == 0)  throw new SingleMessageValidationException("Invalid tutorial and chapter");
 	}
 
 	public void updateLesson(String tutorialID, String chapterID, String lessonID, String name) {

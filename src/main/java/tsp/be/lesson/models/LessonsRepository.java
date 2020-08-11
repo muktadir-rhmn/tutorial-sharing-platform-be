@@ -9,7 +9,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DatabaseManager;
-import tsp.be.error.SimpleValidationException;
+import tsp.be.error.DataIntegrityValidationException;
+import tsp.be.error.SingleMessageValidationException;
 import tsp.be.tutorial.external.LessonDeNormalizationHandler;
 
 @Service
@@ -46,14 +47,15 @@ public class LessonsRepository {
 
 	//todo: make it transactional
 	public void updateLesson(String lessonID, String name, String body) {
-		ObjectId lessonObjectID = new ObjectId(lessonID);
-		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", lessonObjectID))
+		if (!ObjectId.isValid(lessonID)) throw new DataIntegrityValidationException("Lesson does not exists");
+
+		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", lessonID))
 				.projection(Projections.include("tutorialID", "chapterID"))
 				.first();
-		if (lessonDoc == null) throw new SimpleValidationException("Lesson does not exists");
+		if (lessonDoc == null) throw new DataIntegrityValidationException("Lesson does not exists");
 
 		lessonsCollection.updateOne(
-				Filters.eq("_id", lessonObjectID),
+				Filters.eq("_id", lessonID),
 				Updates.combine(
 						Updates.set("name", name),
 						Updates.set("body", body),

@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import tsp.be.error.MappedValidationException;
-import tsp.be.error.SimpleValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.models.UserRepository;
 import tsp.be.utils.Validator;

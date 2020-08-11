@@ -13,7 +13,6 @@ class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)  // 409
     @ExceptionHandler(ValidationException.class)
     public Object handleConflict(HttpServletRequest request, Exception exception) {
-        System.out.println("got some validation error");
         ValidationException validationException = (ValidationException) exception;
         return validationException.getErrorObject();
     }
