@@ -42,7 +42,7 @@ public class CommentsRepository {
 	}
 
 	public List<Comment> getComments(String lessonID, Integer pageNo, Integer pageSize) {
-		FindIterable<Document> commentDocs = commentsCollection.find(Filters.eq("_id", new ObjectId(lessonID)))
+		FindIterable<Document> commentDocs = commentsCollection.find(Filters.eq("lessonID", new ObjectId(lessonID)))
 				.sort(Sorts.ascending("createdAt"));
 
 		if (pageNo != null && pageSize != null){
@@ -53,8 +53,8 @@ public class CommentsRepository {
 		for(Document commentDoc: commentDocs) {
 			Comment comment = new Comment();
 			comment.id = commentDoc.getObjectId("_id").toString();
-			comment.lessonID = commentDoc.getString("lessonID");
-			comment.commenterID = commentDoc.getString("commenterID");
+			comment.lessonID = commentDoc.getObjectId("lessonID").toString();
+			comment.commenterID = commentDoc.getObjectId("commenterID").toString();
 			comment.commenterName = commentDoc.getString("commenterName");
 			comment.body = commentDoc.getString("body");
 			comment.createdAt = commentDoc.getLong("createdAt");
