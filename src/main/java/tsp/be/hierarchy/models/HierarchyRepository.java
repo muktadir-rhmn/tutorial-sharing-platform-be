@@ -25,7 +25,7 @@ public class HierarchyRepository {
 		Category category = new Category();
 		category.id = rootCategoryDoc.getObjectId("_id").toString();
 		category.name = rootCategoryDoc.getString("name");
-		category.children = parseChildren(rootCategoryDoc.getList("children", Document.class));
+		category.subcategories = parseChildren((List<Document>) rootCategoryDoc.get("subcategories"));
 
 		return category;
 	}
@@ -33,10 +33,11 @@ public class HierarchyRepository {
 	private List<Category> parseChildren(List<Document> childrenDocs) {
 		List<Category> list = new ArrayList<>(childrenDocs.size());
 		for(Document childDoc: childrenDocs) {
+			System.out.println(childDoc);
 			Category childCategory = new Category();
 			childCategory.id = childDoc.getObjectId("_id").toString();
 			childCategory.name = childDoc.getString("name");
-			childCategory.children = parseChildren(childDoc.getList("children", Document.class));
+			childCategory.subcategories = parseChildren((List<Document>) childDoc.get("subcategories"));
 
 			list.add(childCategory);
 		}

@@ -2,10 +2,7 @@ package tsp.be.tutorial.models;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Projections;
-import com.mongodb.client.model.UpdateOptions;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.*;
 import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -65,6 +62,22 @@ public class TutorialsRepository {
 	public List<TutorialMetaData> getTutorials(String categoryID) {
 		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("categoryID", new ObjectId(categoryID)))
 				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
+
+		List<TutorialMetaData> tutorials = new ArrayList<>();
+		for(Document tutorialDoc: tutorialDocs) {
+			TutorialMetaData tutorial = tutorialDocToTutorialMetaData(tutorialDoc);
+
+			tutorials.add(tutorial);
+		}
+
+		return tutorials;
+	}
+
+	public List<TutorialMetaData> getRecentTutorials(int limit) {
+		FindIterable<Document> tutorialDocs = tutorialsCollection.find()
+				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"))
+				.sort(Sorts.ascending("createdAt"))
+				.limit(limit);
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {
