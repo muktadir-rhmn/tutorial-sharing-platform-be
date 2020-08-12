@@ -62,11 +62,11 @@ public class TutorialsRepository {
 	public List<TutorialMetaData> getTutorials(String categoryID, String authorID) {
 		Bson filters = null;
 		if (categoryID != null && authorID != null) {
-			filters = Filters.and(Filters.eq("categoryID", categoryID), Filters.eq("authorID", new ObjectId(authorID)));
+			filters = Filters.and(Filters.eq("categoryID", new ObjectId(categoryID)), Filters.eq("authorID", new ObjectId(authorID)));
 		} else if(categoryID != null) {
-			filters = Filters.eq("categoryID", categoryID);
+			filters = Filters.eq("categoryID", new ObjectId(categoryID));
 		} else if (authorID != null) {
-			filters = Filters.eq("authorID", authorID);
+			filters = Filters.eq("authorID", new ObjectId(authorID));
 		}
 
 		FindIterable<Document> tutorialDocs;
