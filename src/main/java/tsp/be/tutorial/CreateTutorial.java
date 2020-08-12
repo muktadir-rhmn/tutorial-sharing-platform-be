@@ -28,7 +28,7 @@ public class CreateTutorial {
 	@Autowired
 	private TutorialsRepository tutorialsRepository;
 
-	@PostMapping(TUTORIAL_ROOT_PATH + "/create")
+	@PostMapping(TUTORIAL_ROOT_PATH)
 	public CreateTutorialResponse createTutorial(@RequestAttribute("user") UserDescriptor userDescriptor, @RequestBody CreateTutorialRequest request) {
 		validate(request);
 		String tutorialID = tutorialsRepository.createTutorial(userDescriptor.getUserID(), userDescriptor.getUserName(), request.name, request.description, request.categoryID);
