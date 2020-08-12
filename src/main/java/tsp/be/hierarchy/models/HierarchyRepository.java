@@ -1,12 +1,16 @@
 package tsp.be.hierarchy.models;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.*;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DatabaseManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -42,5 +46,37 @@ public class HierarchyRepository {
 			list.add(childCategory);
 		}
 		return list;
+	}
+
+	public String createCategory(String name, String[] pathFromRoot) {
+		ObjectId categoryID = new ObjectId();
+
+		Document categoryDoc = new Document();
+		categoryDoc.append("_id", categoryID);
+		categoryDoc.append("name", name);
+		categoryDoc.append("subcategories", Collections.emptyList());
+
+		List<Bson> arrayFilters = new ArrayList<>();
+
+		StringBuilder updateString = new StringBuilder("subcategories");
+		for(int i = 1; i < pathFromRoot.length; i++) {
+			updateString.append(".$[t");
+			updateString.append(i);
+			updateString.append("]");
+			updateString.append(".subcategories");
+
+			arrayFilters.add(Filters.eq("t" + i + "._id", new ObjectId(pathFromRoot[i])));
+		}
+
+		List<Document> list = new ArrayList<>();
+		list.add(categoryDoc);
+
+		hierarchyCollection.updateOne(
+				Filters.eq("_id", new ObjectId(pathFromRoot[0])),
+				Updates.pushEach(updateString.toString(), list, new PushOptions().sortDocument(Sorts.ascending("name"))),
+				new UpdateOptions().arrayFilters(arrayFilters)
+		);
+
+		return categoryID.toString();
 	}
 }
