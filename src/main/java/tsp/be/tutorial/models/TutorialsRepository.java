@@ -59,9 +59,21 @@ public class TutorialsRepository {
 		return chapterID.toString();
 	}
 
-	public List<TutorialMetaData> getTutorials(String categoryID) {
-		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("categoryID", new ObjectId(categoryID)))
-				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
+	public List<TutorialMetaData> getTutorials(String categoryID, String authorID) {
+		Bson filters = null;
+		if (categoryID != null && authorID != null) {
+			filters = Filters.and(Filters.eq("categoryID", categoryID), Filters.eq("authorID", new ObjectId(authorID)));
+		} else if(categoryID != null) {
+			filters = Filters.eq("categoryID", categoryID);
+		} else if (authorID != null) {
+			filters = Filters.eq("authorID", authorID);
+		}
+
+		FindIterable<Document> tutorialDocs;
+		if (filters != null) tutorialDocs = tutorialsCollection.find(filters);
+		else tutorialDocs = tutorialsCollection.find();
+
+		tutorialDocs.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {

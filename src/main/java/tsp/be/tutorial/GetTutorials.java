@@ -23,9 +23,12 @@ public class GetTutorials {
 
 	@SigninNotRequired
 	@GetMapping(TUTORIAL_ROOT_PATH)
-	public GetTutorialsResponse getTutorials(@RequestParam("categoryID") String categoryID) {
+	public GetTutorialsResponse getTutorials(
+			@RequestParam(value = "categoryID", required = false) String categoryID,
+			@RequestParam(value = "authorID", required = false) String authorID
+	) {
 		GetTutorialsResponse response = new GetTutorialsResponse();
-		response.tutorials = tutorialsRepository.getTutorials(categoryID);
+		response.tutorials = tutorialsRepository.getTutorials(categoryID, authorID);
 		return response;
 	}
 
