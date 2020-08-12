@@ -4,6 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +57,7 @@ public class LessonsRepository {
 		DBValidator.validateNotNull("Lesson", lessonDoc);
 
 		lessonsCollection.updateOne(
-				Filters.eq("_id", lessonID),
+				Filters.eq("_id", new ObjectId(lessonID)),
 				Updates.combine(
 						Updates.set("name", name),
 						Updates.set("body", body),
