@@ -4,6 +4,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -36,6 +38,7 @@ public class CommentsRepository {
 		commentDoc.append("commenterID", commenterObjectID);
 		commentDoc.append("commenterName", commenterName);
 		commentDoc.append("body", commentBody);
+		commentDoc.append("replies", Collections.emptyList());
 		commentDoc.append("createdAt", System.currentTimeMillis());
 		commentDoc.append("updatedAt", System.currentTimeMillis());
 
@@ -62,6 +65,7 @@ public class CommentsRepository {
 			comment.commenterID = commentDoc.getObjectId("commenterID").toString();
 			comment.commenterName = commentDoc.getString("commenterName");
 			comment.body = commentDoc.getString("body");
+			comment.replies = extractReplies((List<Document>) commentDoc.get("replies"));
 			comment.createdAt = commentDoc.getLong("createdAt");
 			comment.updatedAt = commentDoc.getLong("updatedAt");
 
@@ -71,8 +75,42 @@ public class CommentsRepository {
 		return comments;
 	}
 
+	private List<Reply> extractReplies(List<Document> replyDocs) {
+		List<Reply> replies = new ArrayList<>();
+		for (Document replyDoc: replyDocs) {
+			Reply reply = new Reply();
+			reply.id = replyDoc.getObjectId("_id").toString();
+			reply.body = replyDoc.getString("body");
+			reply.commenterID = replyDoc.getObjectId("commenterID").toString();
+			reply.commenterName = replyDoc.getString("commenterName");
+			reply.createdAt = replyDoc.getLong("createdAt");
+			reply.updatedAt = replyDoc.getLong("updatedAt");
+
+			replies.add(reply);
+		}
+		return replies;
+	}
+
 	public int countTotalComments(String lessonID) {
 		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
-		return (int) commentsCollection.countDocuments(Filters.eq("_id", lessonObjectID));
+		return (int) commentsCollection.countDocuments(Filters.eq("lessonID", lessonObjectID));
 	}
+
+	public String addReply(String commenterID, String commenterName, String parentCommentID, String commentBody) {
+		ObjectId commenterObjectID = DBUtils.validateAndCreateObjectID(commenterID);
+		ObjectId parentCommentObjectID = DBUtils.validateAndCreateObjectID(parentCommentID);
+		ObjectId replyObjectID = new ObjectId();
+
+		Document replyDoc = new Document();
+		replyDoc.append("_id", replyObjectID);
+		replyDoc.append("body", commentBody);
+		replyDoc.append("commenterID", commenterObjectID);
+		replyDoc.append("commenterName", commenterName);
+		replyDoc.append("createdAt", System.currentTimeMillis());
+		replyDoc.append("updatedAt", System.currentTimeMillis());
+
+		commentsCollection.updateOne(Filters.eq("_id", parentCommentObjectID), Updates.push("replies", replyDoc));
+		return commenterObjectID.toString();
+	}
+
 }

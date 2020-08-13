@@ -37,7 +37,6 @@ public class HierarchyRepository {
 	private List<Category> parseChildren(List<Document> childrenDocs) {
 		List<Category> list = new ArrayList<>(childrenDocs.size());
 		for(Document childDoc: childrenDocs) {
-			System.out.println(childDoc);
 			Category childCategory = new Category();
 			childCategory.id = childDoc.getObjectId("_id").toString();
 			childCategory.name = childDoc.getString("name");
