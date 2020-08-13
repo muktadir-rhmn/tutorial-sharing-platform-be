@@ -11,7 +11,6 @@ import tsp.be.config.ConfigurationManager;
 import tsp.be.config.pojos.JWTConfiguration;
 import tsp.be.user.UserDescriptor;
 
-
 import java.util.Map;
 
 /**
