@@ -34,8 +34,9 @@ public class NotesRepository {
 		if (result.getModifiedCount() == 0) {
 			Document noteDoc = new Document();
 			noteDoc.append("_id", new ObjectId());
-			noteDoc.append("userID", userID);
-			noteDoc.append("lessonID", lessonID);
+			noteDoc.append("userID", userObjectID);
+			noteDoc.append("lessonID", lessonObjectID);
+			noteDoc.append("note", note);
 
 			notesCollection.insertOne(noteDoc);
 		}

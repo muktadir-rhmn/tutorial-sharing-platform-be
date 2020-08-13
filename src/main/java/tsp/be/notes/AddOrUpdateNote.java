@@ -6,14 +6,14 @@ import tsp.be.notes.models.NotesRepository;
 import tsp.be.user.UserDescriptor;
 import tsp.be.utils.SingleMessageResponse;
 
-import static tsp.be.notes.MetaData.ANNOTATION_ROOT_PATH;
+import static tsp.be.notes.MetaData.NOTES_ROOT_PATH;
 
 class AddOrUpdateNoteRequest {
 	public String note;
 }
 
 @RestController
-@RequestMapping(ANNOTATION_ROOT_PATH)
+@RequestMapping(NOTES_ROOT_PATH)
 public class AddOrUpdateNote {
 	@Autowired
 	private NotesRepository notesRepository;
