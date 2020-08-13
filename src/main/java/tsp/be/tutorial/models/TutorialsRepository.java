@@ -9,6 +9,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
 import tsp.be.error.SingleMessageValidationException;
 
@@ -29,12 +30,13 @@ public class TutorialsRepository {
 
 	public String createTutorial(String authorID, String authorName, String name, String description, String categoryID) {
 		ObjectId tutorialID = new ObjectId();
+
 		Document tutorialDoc = new Document();
 		tutorialDoc.append("_id", tutorialID);
 		tutorialDoc.append("name", name);
 		tutorialDoc.append("description", description);
-		tutorialDoc.append("categoryID", new ObjectId(categoryID));
-		tutorialDoc.append("authorID", new ObjectId(authorID));
+		tutorialDoc.append("categoryID", DBUtils.validateAndCreateObjectID(categoryID));
+		tutorialDoc.append("authorID", DBUtils.validateAndCreateObjectID(authorID));
 		tutorialDoc.append("authorName", authorName);
 		tutorialDoc.append("chapters", Collections.emptyList());
 
@@ -44,29 +46,29 @@ public class TutorialsRepository {
 	}
 
 	public String addChapter(String tutorialID, String name) {
-		ObjectId chapterID = new ObjectId();
+		ObjectId chapterObjectID = new ObjectId();
 
 		Document chapter = new Document();
-		chapter.append("_id", chapterID);
+		chapter.append("_id", chapterObjectID);
 		chapter.append("name", name);
 		chapter.append("lessons", Collections.emptyList());
 
 		tutorialsCollection.updateOne(
-				Filters.eq("_id", new ObjectId(tutorialID)),
+				Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID)),
 				Updates.combine(Updates.push("chapters", chapter))
 		);
 
-		return chapterID.toString();
+		return chapterObjectID.toString();
 	}
 
 	public List<TutorialMetaData> getTutorials(String categoryID, String authorID) {
 		Bson filters = null;
 		if (categoryID != null && authorID != null) {
-			filters = Filters.and(Filters.eq("categoryID", new ObjectId(categoryID)), Filters.eq("authorID", new ObjectId(authorID)));
+			filters = Filters.and(Filters.eq("categoryID", DBUtils.validateAndCreateObjectID(categoryID)), Filters.eq("authorID", DBUtils.validateAndCreateObjectID(authorID)));
 		} else if(categoryID != null) {
-			filters = Filters.eq("categoryID", new ObjectId(categoryID));
+			filters = Filters.eq("categoryID", DBUtils.validateAndCreateObjectID(categoryID));
 		} else if (authorID != null) {
-			filters = Filters.eq("authorID", new ObjectId(authorID));
+			filters = Filters.eq("authorID", DBUtils.validateAndCreateObjectID(authorID));
 		}
 
 		FindIterable<Document> tutorialDocs;
@@ -102,7 +104,7 @@ public class TutorialsRepository {
 	}
 
 	public List<TutorialMetaData> getTutorialsOfUser(String userID) {
-		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("authorID", new ObjectId(userID)))
+		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("authorID", DBUtils.validateAndCreateObjectID(userID)))
 				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
@@ -128,7 +130,7 @@ public class TutorialsRepository {
 	}
 
 	public Tutorial getTutorialContents(String tutorialID) {
-		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", new ObjectId(tutorialID))).first();
+		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID))).first();
 		if (tutorialDoc == null) throw new SingleMessageValidationException("Tutorial not found");
 
 		Tutorial tutorial = new Tutorial();
@@ -171,11 +173,11 @@ public class TutorialsRepository {
 
 	public void addLesson(String tutorialID, String chapterID, String lessonID, String name) {
 		Document lessonMetaData = new Document();
-		lessonMetaData.append("_id", new ObjectId(lessonID));
+		lessonMetaData.append("_id", DBUtils.validateAndCreateObjectID(lessonID));
 		lessonMetaData.append("name", name);
 
 		UpdateResult result = tutorialsCollection.updateOne(
-				Filters.and(Filters.eq("_id", new ObjectId(tutorialID)), Filters.eq("chapters._id", new ObjectId(chapterID))),
+				Filters.and(Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID)), Filters.eq("chapters._id", DBUtils.validateAndCreateObjectID(chapterID))),
 				Updates.push("chapters.$.lessons", lessonMetaData)
 		);
 
@@ -184,11 +186,11 @@ public class TutorialsRepository {
 
 	public void updateLesson(String tutorialID, String chapterID, String lessonID, String name) {
 		List<Bson> arrayFilters = new ArrayList<>();
-		arrayFilters.add(Filters.eq("chapter._id", new ObjectId(chapterID)));
-		arrayFilters.add(Filters.eq("lesson._id", new ObjectId(lessonID)));
+		arrayFilters.add(Filters.eq("chapter._id", DBUtils.validateAndCreateObjectID(chapterID)));
+		arrayFilters.add(Filters.eq("lesson._id", DBUtils.validateAndCreateObjectID(lessonID)));
 
 		tutorialsCollection.updateOne(
-				Filters.eq("_id", new ObjectId(tutorialID)),
+				Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID)),
 				Updates.set("chapters.$[chapter].lessons.$[lesson].name", name),
 				new UpdateOptions().arrayFilters(arrayFilters)
 		);

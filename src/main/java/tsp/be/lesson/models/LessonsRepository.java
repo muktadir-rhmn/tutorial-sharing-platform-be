@@ -4,15 +4,12 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Projections;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.UpdateResult;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tsp.be.db.DBValidator;
+import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
-import tsp.be.error.DataIntegrityValidationException;
-import tsp.be.error.SingleMessageValidationException;
 import tsp.be.tutorial.external.LessonDeNormalizationHandler;
 
 @Service
@@ -35,8 +32,8 @@ public class LessonsRepository {
 
 		Document lessonDoc = new Document();
 		lessonDoc.append("_id", lessonID);
-		lessonDoc.append("tutorialID", new ObjectId(tutorialID));
-		lessonDoc.append("chapterID", new ObjectId(chapterID));
+		lessonDoc.append("tutorialID", DBUtils.validateAndCreateObjectID(tutorialID));
+		lessonDoc.append("chapterID", DBUtils.validateAndCreateObjectID(chapterID));
 		lessonDoc.append("name", name);
 		lessonDoc.append("body", body);
 		lessonDoc.append("createdAt", System.currentTimeMillis());
@@ -49,15 +46,15 @@ public class LessonsRepository {
 
 	//todo: make it transactional
 	public void updateLesson(String lessonID, String name, String body) {
-		DBValidator.validateObjectID("Lesson", lessonID);
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
 
-		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", new ObjectId(lessonID)))
+		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", lessonObjectID))
 				.projection(Projections.include("tutorialID", "chapterID"))
 				.first();
-		DBValidator.validateNotNull("Lesson", lessonDoc);
+		DBUtils.validateNotNull(lessonDoc);
 
 		lessonsCollection.updateOne(
-				Filters.eq("_id", new ObjectId(lessonID)),
+				Filters.eq("_id", lessonObjectID),
 				Updates.combine(
 						Updates.set("name", name),
 						Updates.set("body", body),
@@ -72,10 +69,10 @@ public class LessonsRepository {
 	}
 
 	public Lesson getLesson(String lessonID) {
-		DBValidator.validateObjectID("Lesson", lessonID);
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
 
-		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", new ObjectId(lessonID))).first();
-		DBValidator.validateNotNull("Lesson", lessonDoc);
+		Document lessonDoc = lessonsCollection.find(Filters.eq("_id", lessonObjectID)).first();
+		DBUtils.validateNotNull(lessonDoc);
 
 		Lesson lesson = new Lesson();
 		lesson.id = lessonDoc.getObjectId("_id").toString();

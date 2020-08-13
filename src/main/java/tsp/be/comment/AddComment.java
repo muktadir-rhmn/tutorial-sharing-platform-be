@@ -25,11 +25,8 @@ public class AddComment {
 
 	@PostMapping("")
 	public AddCommentResponse addComment(@RequestAttribute("user") UserDescriptor userDescriptor, @RequestBody AddCommentRequest request) {
-		String commentID = commentsRepository.addComment(userDescriptor.getUserID(), userDescriptor.getUserName(), request.lessonID, request.commentBody);
-
-		System.out.println("jlksdjf");
 		AddCommentResponse response = new AddCommentResponse();
-		response.commentID = commentID;
+		response.commentID = commentsRepository.addComment(userDescriptor.getUserID(), userDescriptor.getUserName(), request.lessonID, request.commentBody);
 		return response;
 	}
 

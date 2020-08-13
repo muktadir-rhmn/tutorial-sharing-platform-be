@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
 
 import java.util.ArrayList;
@@ -25,12 +26,14 @@ public class CommentsRepository {
 	}
 
 	public String addComment(String commenterID, String commenterName, String lessonID, String commentBody) {
-		ObjectId commentIDObject = new ObjectId();
+		ObjectId commenterObjectID = DBUtils.validateAndCreateObjectID(commenterID);
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
+		ObjectId commentObjectID = new ObjectId();
 
 		Document commentDoc = new Document();
-		commentDoc.append("_id", commentIDObject);
-		commentDoc.append("lessonID", new ObjectId(lessonID));
-		commentDoc.append("commenterID", new ObjectId(commenterID));
+		commentDoc.append("_id", commentObjectID);
+		commentDoc.append("lessonID", lessonObjectID);
+		commentDoc.append("commenterID", commenterObjectID);
 		commentDoc.append("commenterName", commenterName);
 		commentDoc.append("body", commentBody);
 		commentDoc.append("createdAt", System.currentTimeMillis());
@@ -38,11 +41,13 @@ public class CommentsRepository {
 
 		commentsCollection.insertOne(commentDoc);
 
-		return commentIDObject.toString();
+		return commentObjectID.toString();
 	}
 
 	public List<Comment> getComments(String lessonID, Integer pageNo, Integer pageSize) {
-		FindIterable<Document> commentDocs = commentsCollection.find(Filters.eq("lessonID", new ObjectId(lessonID)))
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
+
+		FindIterable<Document> commentDocs = commentsCollection.find(Filters.eq("lessonID", lessonObjectID))
 				.sort(Sorts.ascending("createdAt"));
 
 		if (pageNo != null && pageSize != null){
@@ -67,6 +72,7 @@ public class CommentsRepository {
 	}
 
 	public int countTotalComments(String lessonID) {
-		return (int) commentsCollection.countDocuments(Filters.eq("_id", new ObjectId(lessonID)));
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
+		return (int) commentsCollection.countDocuments(Filters.eq("_id", lessonObjectID));
 	}
 }
