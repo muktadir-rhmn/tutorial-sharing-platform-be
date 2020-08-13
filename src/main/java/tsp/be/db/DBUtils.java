@@ -9,11 +9,11 @@ public class DBUtils {
 		try{
 			return new ObjectId(id);
 		} catch (IllegalArgumentException ex) {
-			throw new DataIntegrityValidationException("ID does not exist. ");
+			throw new DataIntegrityValidationException("Object does not exist. ");
 		}
 	}
 
 	public static void validateNotNull(Document document) {
-		if (document == null) throw new DataIntegrityValidationException("ID does not exists");
+		if (document == null) throw new DataIntegrityValidationException("Object does not exists");
 	}
 }
