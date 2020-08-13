@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
 import tsp.be.error.SingleMessageValidationException;
+import tsp.be.tutorial.UpdateTutorial;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,7 +76,7 @@ public class TutorialsRepository {
 		if (filters != null) tutorialDocs = tutorialsCollection.find(filters);
 		else tutorialDocs = tutorialsCollection.find();
 
-		tutorialDocs.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
+		tutorialDocs.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"));
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {
@@ -105,7 +106,7 @@ public class TutorialsRepository {
 
 	public List<TutorialMetaData> getTutorialsOfUser(String userID) {
 		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("authorID", DBUtils.validateAndCreateObjectID(userID)))
-				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"));
+				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"));
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {
@@ -123,10 +124,22 @@ public class TutorialsRepository {
 		tutorial.id = tutorialDoc.getObjectId("_id").toString();
 		tutorial.name = tutorialDoc.getString("name");
 		tutorial.description = tutorialDoc.getString("description");
+		tutorial.categoryID = tutorialDoc.getObjectId("categoryID").toString();
 		tutorial.authorID = tutorialDoc.getObjectId("authorID").toString();
 		tutorial.authorName = tutorialDoc.getString("authorName");
 
 		return tutorial;
+	}
+
+	public TutorialMetaData getTutorialMetaData(String tutorialID) {
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+
+		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", tutorialObjectID))
+				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"))
+				.first();
+		DBUtils.validateNotNull(tutorialDoc);
+
+		return tutorialDocToTutorialMetaData(tutorialDoc);
 	}
 
 	public Tutorial getTutorialContents(String tutorialID) {
@@ -200,10 +213,20 @@ public class TutorialsRepository {
 		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
 		ObjectId chapterObjectID = DBUtils.validateAndCreateObjectID(chapterID);
 
-		UpdateResult result = tutorialsCollection.updateOne(
+		tutorialsCollection.updateOne(
 				Filters.and(Filters.eq("_id", tutorialObjectID), Filters.eq("chapters._id", chapterObjectID)),
 				Updates.set("chapters.$.name", newName)
 		);
-		System.out.println(result);
+	}
+
+	public void updateTutorial(String tutorialID, String categoryID, String name, String description) {
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+		ObjectId categoryObjectID = DBUtils.validateAndCreateObjectID(categoryID);
+
+		tutorialsCollection.updateOne(
+				Filters.eq("_id", tutorialObjectID),
+				Updates.combine(Updates.set("name", name), Updates.set("description", description), Updates.set("categoryID", categoryObjectID))
+		);
+
 	}
 }

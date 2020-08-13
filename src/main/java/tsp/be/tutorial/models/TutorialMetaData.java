@@ -4,6 +4,7 @@ public class TutorialMetaData {
 	public String id;
 	public String name;
 	public String description;
+	public String categoryID;
 
 	public String authorID;
 	public String authorName;
