@@ -90,7 +90,7 @@ public class TutorialsRepository {
 
 	public List<TutorialMetaData> getRecentTutorials(int limit) {
 		FindIterable<Document> tutorialDocs = tutorialsCollection.find()
-				.projection(Projections.include("_id", "name", "description", "authorID", "authorName"))
+				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"))
 				.sort(Sorts.ascending("createdAt"))
 				.limit(limit);
 

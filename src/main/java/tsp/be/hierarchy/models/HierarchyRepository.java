@@ -49,34 +49,61 @@ public class HierarchyRepository {
 	}
 
 	public String createCategory(String name, String[] pathFromRoot) {
-		ObjectId categoryID = new ObjectId();
+		return createCategory(new ObjectId(), name, pathFromRoot);
+	}
 
+	private String createCategory(ObjectId categoryID, String name, String[] pathFromRoot) {
 		Document categoryDoc = new Document();
 		categoryDoc.append("_id", categoryID);
 		categoryDoc.append("name", name);
 		categoryDoc.append("subcategories", Collections.emptyList());
 
 		List<Bson> arrayFilters = new ArrayList<>();
-
-		StringBuilder updateString = new StringBuilder("subcategories");
-		for(int i = 1; i < pathFromRoot.length; i++) {
-			updateString.append(".$[t");
-			updateString.append(i);
-			updateString.append("]");
-			updateString.append(".subcategories");
-
-			arrayFilters.add(Filters.eq("t" + i + "._id", DBUtils.validateAndCreateObjectID(pathFromRoot[i])));
-		}
+		String updateString = buildUpdateStringFromIDPath(pathFromRoot, arrayFilters);
 
 		List<Document> list = new ArrayList<>();
 		list.add(categoryDoc);
 
 		hierarchyCollection.updateOne(
 				Filters.eq("_id", DBUtils.validateAndCreateObjectID(pathFromRoot[0])),
-				Updates.pushEach(updateString.toString(), list, new PushOptions().sortDocument(Sorts.ascending("name"))),
+				Updates.pushEach(updateString, list, new PushOptions().sortDocument(Sorts.ascending("name"))),
 				new UpdateOptions().arrayFilters(arrayFilters)
 		);
 
 		return categoryID.toString();
+	}
+
+	//todo: make it transactional
+	public void updateCategory(String[] idPath, String name, String[] parentIDPath) {
+		removeSubcategory(idPath);
+		createCategory(DBUtils.validateAndCreateObjectID(idPath[idPath.length - 1]), name, parentIDPath);
+	}
+
+	private void removeSubcategory(String[] idPath) {
+		List<Bson> arrayFilters = new ArrayList<>();
+
+		String[] parentIDPath = new String[idPath.length - 1];
+		System.arraycopy(idPath, 0, parentIDPath, 0, parentIDPath.length);
+		String updateString = buildUpdateStringFromIDPath(parentIDPath, arrayFilters);
+
+		hierarchyCollection.updateOne(
+				Filters.eq("_id", DBUtils.validateAndCreateObjectID(idPath[0])),
+				Updates.pull(updateString, Filters.eq("_id", DBUtils.validateAndCreateObjectID(idPath[idPath.length - 1]))),
+				new UpdateOptions().arrayFilters(arrayFilters)
+		);
+	}
+
+	private String buildUpdateStringFromIDPath(String[] parentIDPath, List<Bson> arrayFilters) {
+		StringBuilder updateString = new StringBuilder("subcategories");
+		for(int i = 1; i < parentIDPath.length; i++) {
+			updateString.append(".$[t");
+			updateString.append(i);
+			updateString.append("]");
+			updateString.append(".subcategories");
+
+			arrayFilters.add(Filters.eq("t" + i + "._id", DBUtils.validateAndCreateObjectID(parentIDPath[i])));
+		}
+
+		return updateString.toString();
 	}
 }

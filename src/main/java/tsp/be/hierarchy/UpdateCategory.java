@@ -6,34 +6,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tsp.be.hierarchy.models.HierarchyRepository;
+import tsp.be.utils.SingleMessageResponse;
 
 import static tsp.be.hierarchy.MetaData.HIERARCHY_ROOT_PATH;
 
-class CreateCategoryRequest {
+class UpdateCategoryRequest {
+	public String[] idPath;
 	public String name;
 	public String[] parentIDPath;
 }
 
-class CreateCategoryResponse {
-	public String categoryID;
-}
-
 @RestController
 @RequestMapping(HIERARCHY_ROOT_PATH)
-public class CreateCategory {
-
+public class UpdateCategory {
 	@Autowired
 	private HierarchyRepository hierarchyRepository;
 
-	@PostMapping("/create-category")
-	public CreateCategoryResponse createCategory(@RequestBody CreateCategoryRequest request) {
-		validate(request);
+	@PostMapping("/update-category")
+	public SingleMessageResponse updateCategory(@RequestBody UpdateCategoryRequest request) {
+		hierarchyRepository.updateCategory(request.idPath, request.name, request.parentIDPath);
 
-		CreateCategoryResponse response = new CreateCategoryResponse();
-		response.categoryID = hierarchyRepository.createCategory(request.name, request.parentIDPath);
-		return response;
-	}
-
-	private void validate(CreateCategoryRequest request) {
+		return new SingleMessageResponse("Operation Success");
 	}
 }
