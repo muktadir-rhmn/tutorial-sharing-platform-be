@@ -7,6 +7,7 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
 
 import java.util.ArrayList;
@@ -64,14 +65,14 @@ public class HierarchyRepository {
 			updateString.append("]");
 			updateString.append(".subcategories");
 
-			arrayFilters.add(Filters.eq("t" + i + "._id", new ObjectId(pathFromRoot[i])));
+			arrayFilters.add(Filters.eq("t" + i + "._id", DBUtils.validateAndCreateObjectID(pathFromRoot[i])));
 		}
 
 		List<Document> list = new ArrayList<>();
 		list.add(categoryDoc);
 
 		hierarchyCollection.updateOne(
-				Filters.eq("_id", new ObjectId(pathFromRoot[0])),
+				Filters.eq("_id", DBUtils.validateAndCreateObjectID(pathFromRoot[0])),
 				Updates.pushEach(updateString.toString(), list, new PushOptions().sortDocument(Sorts.ascending("name"))),
 				new UpdateOptions().arrayFilters(arrayFilters)
 		);

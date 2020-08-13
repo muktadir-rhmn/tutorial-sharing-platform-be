@@ -195,4 +195,15 @@ public class TutorialsRepository {
 				new UpdateOptions().arrayFilters(arrayFilters)
 		);
 	}
+
+	public void updateChapter(String tutorialID, String chapterID, String newName) {
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+		ObjectId chapterObjectID = DBUtils.validateAndCreateObjectID(chapterID);
+
+		UpdateResult result = tutorialsCollection.updateOne(
+				Filters.and(Filters.eq("_id", tutorialObjectID), Filters.eq("chapters._id", chapterObjectID)),
+				Updates.set("chapters.$.name", newName)
+		);
+		System.out.println(result);
+	}
 }
