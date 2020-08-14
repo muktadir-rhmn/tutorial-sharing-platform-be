@@ -229,4 +229,10 @@ public class TutorialsRepository {
 		);
 
 	}
+
+	public void addRating(String tutorialID, String rating) {
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+
+		tutorialsCollection.updateOne(Filters.eq("_id", tutorialObjectID), Updates.inc("rating." + rating, 1));
+	}
 }
