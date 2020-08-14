@@ -5,6 +5,7 @@ public class Reply {
 	public String body;
 	public String commenterID;
 	public String commenterName;
+	public Integer nLikes;
 	public Long createdAt;
 	public Long updatedAt;
 }

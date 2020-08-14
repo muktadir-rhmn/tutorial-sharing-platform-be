@@ -8,6 +8,7 @@ public class Comment {
 	public String commenterID;
 	public String commenterName;
 	public String body;
+	public Integer nLikes;
 	public List<Reply> replies;
 	public Long createdAt;
 	public Long updatedAt;

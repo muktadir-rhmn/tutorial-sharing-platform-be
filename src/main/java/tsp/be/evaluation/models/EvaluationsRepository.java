@@ -32,11 +32,11 @@ public class EvaluationsRepository {
 
 	public void addEvaluation(String userID, String itemID, String evaluation, String itemType) {
 		ObjectId userObjectID = DBUtils.validateAndCreateObjectID(userID);
-		ObjectId itemObjectID = DBUtils.validateAndCreateObjectID(itemID);
 
+		//todo: update if already exists
 		Document evaluationDoc = new Document();
 		evaluationDoc.append("userID", userObjectID);
-		evaluationDoc.append("itemID", itemObjectID);
+		evaluationDoc.append("itemID", itemID);
 		evaluationDoc.append("evaluation", evaluation);
 
 		evaluationsCollection.insertOne(evaluationDoc);
@@ -47,18 +47,14 @@ public class EvaluationsRepository {
 
 	public List<String> getEvaluations(String userID, List<String> itemIDs) {
 		ObjectId userObjectID = DBUtils.validateAndCreateObjectID(userID);
-		List<ObjectId> itemObjectIDs = new ArrayList<>();
-		for (String itemID: itemIDs) {
-			itemObjectIDs.add(DBUtils.validateAndCreateObjectID(itemID));
-		}
 
 		FindIterable<Document> evaluationDocs = evaluationsCollection.find(
-				Filters.and(Filters.eq("userID", userObjectID), Filters.in("itemID", itemObjectIDs))
+				Filters.and(Filters.eq("userID", userObjectID), Filters.in("itemID", itemIDs))
 		).projection(Projections.include("itemID", "evaluation"));
 
 		HashMap<String, String> evaluationMap = new HashMap<>();
 		for (Document evaluationDoc: evaluationDocs) {
-			evaluationMap.put(evaluationDoc.getObjectId("itemID").toString(), evaluationDoc.getString("evaluation"));
+			evaluationMap.put(evaluationDoc.getString("itemID"), evaluationDoc.getString("evaluation"));
 		}
 
 		List<String> evaluations = new ArrayList<>();

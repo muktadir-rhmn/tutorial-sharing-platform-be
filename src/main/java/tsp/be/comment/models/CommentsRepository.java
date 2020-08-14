@@ -65,6 +65,7 @@ public class CommentsRepository {
 			comment.commenterID = commentDoc.getObjectId("commenterID").toString();
 			comment.commenterName = commentDoc.getString("commenterName");
 			comment.body = commentDoc.getString("body");
+			comment.nLikes = commentDoc.getInteger("nLikes");
 			comment.replies = extractReplies((List<Document>) commentDoc.get("replies"));
 			comment.createdAt = commentDoc.getLong("createdAt");
 			comment.updatedAt = commentDoc.getLong("updatedAt");
@@ -83,6 +84,7 @@ public class CommentsRepository {
 			reply.body = replyDoc.getString("body");
 			reply.commenterID = replyDoc.getObjectId("commenterID").toString();
 			reply.commenterName = replyDoc.getString("commenterName");
+			reply.nLikes = replyDoc.getInteger("nLikes");
 			reply.createdAt = replyDoc.getLong("createdAt");
 			reply.updatedAt = replyDoc.getLong("updatedAt");
 
@@ -113,4 +115,20 @@ public class CommentsRepository {
 		return commenterObjectID.toString();
 	}
 
+	public void addLikeDislike(String[] commentIDPath, String evaluation) {
+		ObjectId commentObjectID = DBUtils.validateAndCreateObjectID(commentIDPath[0]);
+		int nLike = evaluation.equals("like") ? 1 : -1;
+
+		if (commentIDPath.length == 1) {
+			commentsCollection.updateOne(
+					Filters.eq("_id", commentObjectID),
+					Updates.inc("nLikes", nLike)
+			);
+		} else if (commentIDPath.length == 2) {
+			commentsCollection.updateOne(
+					Filters.and(Filters.eq("_id", commentObjectID), Filters.eq("replies._id", DBUtils.validateAndCreateObjectID(commentIDPath[1]))),
+					Updates.inc("replies.$.nLikes", nLike));
+		}
+
+	}
 }
