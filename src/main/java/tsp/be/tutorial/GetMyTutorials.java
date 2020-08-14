@@ -19,7 +19,7 @@ public class GetMyTutorials {
 	@GetMapping("/my")
 	public GetTutorialsResponse getTutorials(@RequestAttribute("user") UserDescriptor userDescriptor) {
 		GetTutorialsResponse response = new GetTutorialsResponse();
-		response.tutorials = tutorialsRepository.getTutorialsOfUser(userDescriptor.getUserID());
+		response.tutorials = tutorialsRepository.getTutorials(userDescriptor.getUserID());
 		return response;
 	}
 

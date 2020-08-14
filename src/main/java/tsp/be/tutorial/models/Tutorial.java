@@ -7,6 +7,7 @@ public class Tutorial {
 	public String id;
 	public String name;
 	public String description;
+	public Double avgRating;
 
 	public String authorID;
 	public String authorName;

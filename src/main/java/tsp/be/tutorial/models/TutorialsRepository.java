@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
 import tsp.be.error.SingleMessageValidationException;
-import tsp.be.tutorial.UpdateTutorial;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -76,7 +75,7 @@ public class TutorialsRepository {
 		if (filters != null) tutorialDocs = tutorialsCollection.find(filters);
 		else tutorialDocs = tutorialsCollection.find();
 
-		tutorialDocs.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"));
+		tutorialDocs.projection(Projections.include("_id", "name", "description", "rating", "categoryID", "authorID", "authorName"));
 
 		List<TutorialMetaData> tutorials = new ArrayList<>();
 		for(Document tutorialDoc: tutorialDocs) {
@@ -88,9 +87,13 @@ public class TutorialsRepository {
 		return tutorials;
 	}
 
+	public List<TutorialMetaData> getTutorials(String authorID) {
+		return getTutorials(null, authorID);
+	}
+
 	public List<TutorialMetaData> getRecentTutorials(int limit) {
 		FindIterable<Document> tutorialDocs = tutorialsCollection.find()
-				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"))
+				.projection(Projections.include("_id", "name", "description", "rating", "categoryID", "authorID", "authorName"))
 				.sort(Sorts.ascending("createdAt"))
 				.limit(limit);
 
@@ -104,31 +107,29 @@ public class TutorialsRepository {
 		return tutorials;
 	}
 
-	public List<TutorialMetaData> getTutorialsOfUser(String userID) {
-		FindIterable<Document> tutorialDocs = tutorialsCollection.find(Filters.eq("authorID", DBUtils.validateAndCreateObjectID(userID)))
-				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"));
-
-		List<TutorialMetaData> tutorials = new ArrayList<>();
-		for(Document tutorialDoc: tutorialDocs) {
-			System.out.println(tutorialDoc);
-			TutorialMetaData tutorial = tutorialDocToTutorialMetaData(tutorialDoc);
-
-			tutorials.add(tutorial);
-		}
-
-		return tutorials;
-	}
-
 	private TutorialMetaData tutorialDocToTutorialMetaData(Document tutorialDoc) {
 		TutorialMetaData tutorial = new TutorialMetaData();
 		tutorial.id = tutorialDoc.getObjectId("_id").toString();
 		tutorial.name = tutorialDoc.getString("name");
 		tutorial.description = tutorialDoc.getString("description");
+		tutorial.avgRating = calculateAvgRating((Document) tutorialDoc.get("rating"));
 		tutorial.categoryID = tutorialDoc.getObjectId("categoryID").toString();
 		tutorial.authorID = tutorialDoc.getObjectId("authorID").toString();
 		tutorial.authorName = tutorialDoc.getString("authorName");
 
 		return tutorial;
+	}
+
+	private Double calculateAvgRating(Document rating) {
+		if (rating == null) return null;
+
+		int nOne = (int) rating.getOrDefault("one", 0);
+		int nTwo = (int) rating.getOrDefault("two", 0);
+		int nThree = (int) rating.getOrDefault("three", 0);
+		int nFour = (int) rating.getOrDefault("four", 0);
+		int nFive = (int) rating.getOrDefault("five", 0);
+
+		return  (1.0 * nOne + 2.0 * nTwo + 3.0 * nThree + 4.0 * nFour + 5.0 * nFive) / (nOne + nTwo + nThree + nFour + nFive);
 	}
 
 	public TutorialMetaData getTutorialMetaData(String tutorialID) {
@@ -150,6 +151,7 @@ public class TutorialsRepository {
 		tutorial.id = tutorialDoc.getObjectId("_id").toString();
 		tutorial.name = tutorialDoc.getString("name");
 		tutorial.description = tutorialDoc.getString("description");
+		tutorial.avgRating = calculateAvgRating((Document) tutorialDoc.get("rating"));
 		tutorial.authorID = tutorialDoc.getObjectId("authorID").toString();
 		tutorial.authorName = tutorialDoc.getString("authorName");
 		tutorial.chapters = extractChapters(tutorialDoc.getList("chapters", Document.class));
