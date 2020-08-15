@@ -1,8 +1,6 @@
 package tsp.be.cache;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import tsp.be.utils.JsonConverter;
@@ -20,8 +18,6 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		if(request.getMethod().equals("OPTIONS")) return true; //for CORS
-
 		if (!shouldCache(handler)) return true;
 
 		String cacheKey = generateKey(request);
