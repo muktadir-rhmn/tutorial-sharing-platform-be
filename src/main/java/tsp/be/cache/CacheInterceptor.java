@@ -18,12 +18,13 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		if (!shouldCache(handler)) return true;
+		HandlerMethod handlerMethod = (HandlerMethod) handler;
+		if (!handlerMethod.hasMethodAnnotation(CacheAPIResponse.class)) return true;
 
 		String cacheKey = generateKey(request);
 		String cachedData = cacheManager.get(cacheKey);
 		if (cachedData == null) {
-			request.setAttribute("cacheObject", new CacheObject(generateKey(request)));
+			request.setAttribute("cacheObject", new CacheObject(generateKey(request), handlerMethod.getMethodAnnotation(CacheAPIResponse.class).durationInSec()));
 			return true;
 		}
 
@@ -40,12 +41,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 		if (cacheObject == null) return;
 		String cacheData = new JsonConverter().serialize(cacheObject.value);
 
-		cacheManager.set(cacheObject.key, cacheData, 30);
-	}
-
-	private boolean shouldCache(Object handler) {
-		HandlerMethod handlerMethod = (HandlerMethod) handler;
-		return handlerMethod.hasMethodAnnotation(CacheAPIResponse.class);
+		cacheManager.set(cacheObject.key, cacheData, cacheObject.durationInSec);
 	}
 
 	private String generateKey(HttpServletRequest request) {
