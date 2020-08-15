@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c12e7aca-dc0f-41bb-9f6b-e9c931be818b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/GetMarkedLessons.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/HasMark.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/Mark.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/MetaData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/models/MarkingsRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/tsp/be/marker/models/MarkingsRepositoryTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/db/DBUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/db/DBUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/utils/SingleMessageResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/utils/SingleMessageResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/marker/HasMark.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/HasMark.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/marker/models/MarkingsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/marker/models/MarkingsRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,6 +16,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="JUnit5 Test Class" />
       </list>
     </option>
   </component>
@@ -46,6 +43,8 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -60,8 +59,14 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="tsp.be.marker.models" />
+    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="tmcbe" />
+    </key>
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/docs" />
@@ -79,6 +84,53 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MarkingsRepositoryTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Tutorial Sharing Platform - BE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tsp.be.marker.models.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tsp.be.marker.models" />
+      <option name="MAIN_CLASS_NAME" value="tsp.be.marker.models.MarkingsRepositoryTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MarkingsRepositoryTest.testHasMark" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Tutorial Sharing Platform - BE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tsp.be.marker.models.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tsp.be.marker.models" />
+      <option name="MAIN_CLASS_NAME" value="tsp.be.marker.models.MarkingsRepositoryTest" />
+      <option name="METHOD_NAME" value="testHasMark" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MarkingsRepositoryTest.testHasMarks" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Tutorial Sharing Platform - BE" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tsp.be.marker.models.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="tsp.be.marker.models" />
+      <option name="MAIN_CLASS_NAME" value="tsp.be.marker.models.MarkingsRepositoryTest" />
+      <option name="METHOD_NAME" value="testHasMarks" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -106,6 +158,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.TutorialSharingPlatformApplication" />
+        <item itemvalue="JUnit.MarkingsRepositoryTest.testHasMarks" />
+        <item itemvalue="JUnit.MarkingsRepositoryTest" />
+        <item itemvalue="JUnit.MarkingsRepositoryTest.testHasMark" />
         <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
@@ -169,7 +224,8 @@
       <workItem from="1597422820431" duration="468000" />
       <workItem from="1597430640484" duration="309000" />
       <workItem from="1597431325594" duration="1500000" />
-      <workItem from="1597456466600" duration="5631000" />
+      <workItem from="1597456466600" duration="8640000" />
+      <workItem from="1597486614787" duration="617000" />
     </task>
     <servers />
   </component>
@@ -201,45 +257,45 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="458" y="204" key="#com.intellij.refactoring.typeMigration.ui.FailedConversionsDialog/0.0.1440.900@0.0.1440.900" timestamp="1596897611377" />
-    <state width="1398" height="244" key="GridCell.Tab.0.bottom" timestamp="1597463064503">
+    <state width="1398" height="269" key="GridCell.Tab.0.bottom" timestamp="1597487470946">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597463064503" />
-    <state width="1398" height="244" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1597462094450" />
-    <state width="1398" height="244" key="GridCell.Tab.0.center" timestamp="1597463064501">
+    <state width="1398" height="269" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597487470946" />
+    <state width="1398" height="269" key="GridCell.Tab.0.bottom/0.23.1440.797@0.23.1440.797" timestamp="1597487009376" />
+    <state width="1398" height="269" key="GridCell.Tab.0.center" timestamp="1597487470945">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1597463064501" />
-    <state width="1398" height="244" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1597462094449" />
-    <state width="1398" height="244" key="GridCell.Tab.0.left" timestamp="1597463064501">
+    <state width="1398" height="269" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1597487470945" />
+    <state width="1398" height="269" key="GridCell.Tab.0.center/0.23.1440.797@0.23.1440.797" timestamp="1597487009373" />
+    <state width="1398" height="269" key="GridCell.Tab.0.left" timestamp="1597487470945">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1597463064501" />
-    <state width="1398" height="244" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1597462094448" />
-    <state width="1398" height="244" key="GridCell.Tab.0.right" timestamp="1597463064502">
+    <state width="1398" height="269" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1597487470945" />
+    <state width="1398" height="269" key="GridCell.Tab.0.left/0.23.1440.797@0.23.1440.797" timestamp="1597487009372" />
+    <state width="1398" height="269" key="GridCell.Tab.0.right" timestamp="1597487470946">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1597463064502" />
-    <state width="1398" height="244" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1597462094450" />
-    <state width="1398" height="244" key="GridCell.Tab.1.bottom" timestamp="1597463064504">
+    <state width="1398" height="269" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1597487470946" />
+    <state width="1398" height="269" key="GridCell.Tab.0.right/0.23.1440.797@0.23.1440.797" timestamp="1597487009375" />
+    <state width="1398" height="269" key="GridCell.Tab.1.bottom" timestamp="1597487470949">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597463064504" />
+    <state width="1398" height="269" key="GridCell.Tab.1.bottom/0.0.1440.900@0.0.1440.900" timestamp="1597487470949" />
     <state width="1398" height="244" key="GridCell.Tab.1.bottom/0.23.1440.797@0.23.1440.797" timestamp="1597462094453" />
-    <state width="1398" height="244" key="GridCell.Tab.1.center" timestamp="1597463064503">
+    <state width="1398" height="269" key="GridCell.Tab.1.center" timestamp="1597487470948">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1597463064503" />
+    <state width="1398" height="269" key="GridCell.Tab.1.center/0.0.1440.900@0.0.1440.900" timestamp="1597487470948" />
     <state width="1398" height="244" key="GridCell.Tab.1.center/0.23.1440.797@0.23.1440.797" timestamp="1597462094452" />
-    <state width="1398" height="244" key="GridCell.Tab.1.left" timestamp="1597463064503">
+    <state width="1398" height="269" key="GridCell.Tab.1.left" timestamp="1597487470947">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1597463064503" />
+    <state width="1398" height="269" key="GridCell.Tab.1.left/0.0.1440.900@0.0.1440.900" timestamp="1597487470947" />
     <state width="1398" height="244" key="GridCell.Tab.1.left/0.23.1440.797@0.23.1440.797" timestamp="1597462094451" />
-    <state width="1398" height="244" key="GridCell.Tab.1.right" timestamp="1597463064504">
+    <state width="1398" height="269" key="GridCell.Tab.1.right" timestamp="1597487470948">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="244" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1597463064504" />
+    <state width="1398" height="269" key="GridCell.Tab.1.right/0.0.1440.900@0.0.1440.900" timestamp="1597487470948" />
     <state width="1398" height="244" key="GridCell.Tab.1.right/0.23.1440.797@0.23.1440.797" timestamp="1597462094452" />
     <state x="340" y="168" key="RollbackChangesDialog" timestamp="1596988446259">
       <screen x="0" y="0" width="1440" height="900" />
@@ -253,6 +309,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1597080547964" />
+    <state x="499" y="199" key="com.intellij.testIntegration.createTest.CreateTestDialog" timestamp="1597480661045">
+      <screen x="0" y="0" width="1440" height="900" />
+    </state>
+    <state x="499" y="199" key="com.intellij.testIntegration.createTest.CreateTestDialog/0.0.1440.900@0.0.1440.900" timestamp="1597480661045" />
     <state x="427" y="63" key="refactoring.ChangeSignatureDialog" timestamp="1597149972218">
       <screen x="0" y="0" width="1440" height="900" />
     </state>

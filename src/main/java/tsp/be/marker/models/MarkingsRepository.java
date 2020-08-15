@@ -61,14 +61,20 @@ public class MarkingsRepository {
 		return markedLessonIDs;
 	}
 
-	public boolean hasMark(String userID, String tutorialID, String lessonID, String mark) {
+
+	public boolean[] hasMarks(String userID, String tutorialID, String lessonID, String[] marks) {
 		ObjectId userObjectID = DBUtils.validateAndCreateObjectID(userID);
 		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
 
-		Document marking = markingsCollection.find(
-				Filters.and(Filters.eq("userID", userObjectID), Filters.eq("tutorialID", tutorialObjectID), Filters.eq(mark, lessonID))
-		).projection(Projections.include(mark)).first();
+		boolean[] ans = new boolean[marks.length];
+		for (int i = 0; i < marks.length; i++) {
+			long nMarking = markingsCollection.countDocuments(
+					Filters.and(Filters.eq("userID", userObjectID), Filters.eq("tutorialID", tutorialObjectID), Filters.eq(marks[i], lessonID))
+			);
+			ans[i] = nMarking > 0;
+		}
 
-		return marking != null && ((List<String>)marking.get(mark)).size() > 0;
+		return ans;
 	}
+
 }

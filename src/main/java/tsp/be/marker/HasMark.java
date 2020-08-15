@@ -8,12 +8,12 @@ import tsp.be.user.UserDescriptor;
 
 import static tsp.be.marker.MetaData.PROGRESS_ROOT_PATH;
 
-class HasMarkRequest {
-	public String mark;
+class HasMarksRequest {
+	public String[] marks;
 }
 
-class HasMarkResponse {
-	public boolean hasMark;
+class HasMarksResponse {
+	public boolean[] hasMarks;
 }
 
 @RestController
@@ -24,19 +24,19 @@ public class HasMark {
 	private MarkingsRepository progressesRepository;
 
 	@PostMapping("/{tutorialID}/{lessonID}/has-mark")
-	public HasMarkResponse hasMark(
+	public HasMarksResponse hasMarks(
 			@RequestAttribute("user") UserDescriptor userDescriptor,
 			@PathVariable String tutorialID,
 			@PathVariable String lessonID,
-			@RequestBody HasMarkRequest request
+			@RequestBody HasMarksRequest request
 	){
 		validate(request);
-		HasMarkResponse response = new HasMarkResponse();
-		response.hasMark = progressesRepository.hasMark(userDescriptor.getUserID(), tutorialID, lessonID, request.mark);
+		HasMarksResponse response = new HasMarksResponse();
+		response.hasMarks = progressesRepository.hasMarks(userDescriptor.getUserID(), tutorialID, lessonID, request.marks);
 		return response;
 	}
 
-	private void validate(HasMarkRequest request) {
-		if (request.mark == null) throw new SingleMessageValidationException("Mark is required");
+	private void validate(HasMarksRequest request) {
+		if (request.marks == null) throw new SingleMessageValidationException("Mark is required");
 	}
 }
