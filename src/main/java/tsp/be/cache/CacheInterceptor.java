@@ -22,11 +22,18 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 		if (!handlerMethod.hasMethodAnnotation(CacheAPIResponse.class)) return true;
 
 		String cacheKey = generateKey(request);
-		String cachedData = cacheManager.get(cacheKey);
-		if (cachedData == null) {
-			request.setAttribute("cacheObject", new CacheObject(generateKey(request), handlerMethod.getMethodAnnotation(CacheAPIResponse.class).durationInSec()));
+		request.setAttribute("cacheObject", new CacheObject(generateKey(request), handlerMethod.getMethodAnnotation(CacheAPIResponse.class).durationInSec()));
+
+		String cachedData;
+		try{
+			cachedData = cacheManager.get(cacheKey);
+		} catch (CacheServerDownException ex) {
+			/** if the Cache Server is down, caching will simply ignored and execution will be done as if there is no cache at all */
+			System.out.println("Cache Server down");
 			return true;
 		}
+
+		if (cachedData == null) return true;
 
 		response.setContentType("application/json");
 		response.getWriter().print(cachedData);
@@ -41,7 +48,13 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 		if (cacheObject == null) return;
 		String cacheData = new JsonConverter().serialize(cacheObject.value);
 
-		cacheManager.set(cacheObject.key, cacheData, cacheObject.durationInSec);
+		try{
+			cacheManager.set(cacheObject.key, cacheData, cacheObject.durationInSec);
+		} catch (CacheServerDownException exception) {
+			/** if the Cache Server is down, caching will simply ignored and execution will be done as if there is no cache at all */
+			System.out.println("Cache Server Down");
+		}
+
 	}
 
 	private String generateKey(HttpServletRequest request) {

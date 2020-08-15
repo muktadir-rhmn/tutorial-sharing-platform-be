@@ -11,9 +11,9 @@ The controller layer uses the database layer to serve APIs.
 ![](docs/be_module_design.svg)
 
 The exceptions are 
-- Auth Layer: Every request passes through Auth component and this component is responsible for
+- Auth Layer: Every request passes through Auth layer and this layer is responsible for
 checking whether the request is from an authentic source. 
-- Error Handler Layer: If any error occurs, an exception is thrown and Error Handler layer is responsible for 
+- Error Handler Layer: If any error is found, an exception is thrown and Error Handler layer is responsible for 
 generating appropriate error response. 
 - Cache Layer: If an API is set to be cached, this cache layer caches API response. Once cached, any further request to that API 
 will be served from the cache, until it expires. 
@@ -21,8 +21,8 @@ will be served from the cache, until it expires.
 ## Stacks Used
 Programming Language: Java
 
+Framework: Spring Boot
+
 Database: MongoDB
 
 Cache: Redis
-
-Framework: Spring Boot

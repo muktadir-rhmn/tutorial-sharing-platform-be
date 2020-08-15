@@ -29,10 +29,10 @@ public class TutorialsRepository {
 	}
 
 	public String createTutorial(String authorID, String authorName, String name, String description, String categoryID) {
-		ObjectId tutorialID = new ObjectId();
+		ObjectId tutorialObjectID = new ObjectId();
 
 		Document tutorialDoc = new Document();
-		tutorialDoc.append("_id", tutorialID);
+		tutorialDoc.append("_id", tutorialObjectID);
 		tutorialDoc.append("name", name);
 		tutorialDoc.append("description", description);
 		tutorialDoc.append("categoryID", DBUtils.validateAndCreateObjectID(categoryID));
@@ -42,7 +42,7 @@ public class TutorialsRepository {
 
 		tutorialsCollection.insertOne(tutorialDoc);
 
-		return tutorialID.toString();
+		return tutorialObjectID.toString();
 	}
 
 	public String addChapter(String tutorialID, String name) {
@@ -55,7 +55,7 @@ public class TutorialsRepository {
 
 		tutorialsCollection.updateOne(
 				Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID)),
-				Updates.combine(Updates.push("chapters", chapter))
+				Updates.push("chapters", chapter)
 		);
 
 		return chapterObjectID.toString();
