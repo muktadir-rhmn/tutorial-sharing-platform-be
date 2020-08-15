@@ -5,6 +5,10 @@ import org.bson.types.ObjectId;
 import tsp.be.error.DataIntegrityValidationException;
 
 public class DBUtils {
+	public static void validateObjectID(String id) {
+		if (!ObjectId.isValid(id)) throw new DataIntegrityValidationException("Object does not exist.");
+	}
+
 	public static ObjectId validateAndCreateObjectID(String id) {
 		try{
 			return new ObjectId(id);

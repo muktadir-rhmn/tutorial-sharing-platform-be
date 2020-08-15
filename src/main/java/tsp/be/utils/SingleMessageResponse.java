@@ -6,4 +6,8 @@ public class SingleMessageResponse {
 	public SingleMessageResponse(String message) {
 		this.message = message;
 	}
+
+	public SingleMessageResponse() {
+		this.message = "Operation successful";
+	}
 }
