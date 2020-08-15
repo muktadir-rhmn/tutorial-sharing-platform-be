@@ -1,5 +1,6 @@
 package tsp.be.cache;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -8,23 +9,23 @@ import tsp.be.utils.JsonConverter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
 
-@Component
 public class CacheInterceptor extends HandlerInterceptorAdapter {
 
-	private Map<String, String> cache = new HashMap<>();
+	private CacheManager cacheManager;
+
+	public CacheInterceptor() {
+		this.cacheManager = new CacheManager();
+	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		if(request.getMethod().equals("OPTIONS")) return true; //for CORS
-		System.out.print("cache intercept: ");
 
 		if (!shouldCache(handler)) return true;
 
 		String cacheKey = generateKey(request);
-		String cachedData = cache.get(cacheKey);
+		String cachedData = cacheManager.get(cacheKey);
 		if (cachedData == null) {
 			request.setAttribute("cacheObject", new CacheObject(generateKey(request)));
 			return true;
@@ -43,7 +44,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 		if (cacheObject == null) return;
 		String cacheData = new JsonConverter().serialize(cacheObject.value);
 
-		cache.put(cacheObject.key, cacheData);
+		cacheManager.set(cacheObject.key, cacheData, 30);
 	}
 
 	private boolean shouldCache(Object handler) {
