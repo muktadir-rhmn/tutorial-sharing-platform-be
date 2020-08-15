@@ -5,6 +5,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import tsp.be.cache.CacheInterceptor;
 import tsp.be.user.auth.AuthInterceptor;
 
 @EnableWebMvc
@@ -17,6 +18,7 @@ public class ApplicationConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(new AuthInterceptor());
+        registry.addInterceptor(new CacheInterceptor());
     }
 
     @Override

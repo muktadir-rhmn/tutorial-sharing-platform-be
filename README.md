@@ -13,3 +13,10 @@ The controller layer uses the database layer to serve APIs.
 The exceptions are Auth component and Error Handler component. Every request passes through Auth component and this component is responsible for
 checking whether the request is from an authentic source. If any error occurs, an exception is thrown and Error Handler layer is responsible for 
 generating appropriate error response. 
+
+## Stacks Used
+Programming Language: Java
+
+Database: MongoDB
+
+Framework: Spring Boot
