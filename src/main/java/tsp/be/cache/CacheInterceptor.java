@@ -1,5 +1,7 @@
 package tsp.be.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CacheInterceptor extends HandlerInterceptorAdapter {
+	Logger logger = LoggerFactory.getLogger(CacheInterceptor.class);
 
 	private CacheManager cacheManager;
 
@@ -29,7 +32,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 			cachedData = cacheManager.get(cacheKey);
 		} catch (CacheServerDownException ex) {
 			/** if the Cache Server is down, caching will simply ignored and execution will be done as if there is no cache at all */
-			System.out.println("Cache Server down");
+			logger.error("Cache Server down");
 			return true;
 		}
 
@@ -38,7 +41,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 		response.setContentType("application/json");
 		response.getWriter().print(cachedData);
 
-		System.out.println("serving data from cache");
+		logger.info("serving data from cache");
 		return false;
 	}
 
@@ -52,7 +55,7 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 			cacheManager.set(cacheObject.key, cacheData, cacheObject.durationInSec);
 		} catch (CacheServerDownException exception) {
 			/** if the Cache Server is down, caching will simply ignored and execution will be done as if there is no cache at all */
-			System.out.println("Cache Server Down");
+			logger.error("Cache Server down");
 		}
 
 	}
