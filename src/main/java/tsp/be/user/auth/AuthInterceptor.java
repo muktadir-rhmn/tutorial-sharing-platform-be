@@ -2,12 +2,11 @@ package tsp.be.user.auth;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import tsp.be.error.AccessDeniedException;
-import tsp.be.error.SingleMessageValidationException;
 import tsp.be.user.UserDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -26,13 +25,29 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
         UserDescriptor userDescriptor = tokenManager.verifyTokenAndDecodeData(token);
 
-        if (userDescriptor == null) throw new AccessDeniedException();
+        if (userDescriptor == null) {
+            addAccessDeniedResponse(response, "Sign in required to access this api");
+            return false;
+        }
 
-        boolean hasAccess = handlerMethod.hasMethodAnnotation(RequireAccess.class) &&
+        boolean hasAccess = !handlerMethod.hasMethodAnnotation(RequireAccess.class) ||
                 userDescriptor.hasAccess(handlerMethod.getMethodAnnotation(RequireAccess.class).value());
-        if (!hasAccess) throw new AccessDeniedException();
+        if (!hasAccess) {
+            addAccessDeniedResponse(response, "Permission denied");
+            return false;
+        }
 
         request.setAttribute("user", userDescriptor);
         return true;
+    }
+
+    private void addAccessDeniedResponse(HttpServletResponse response, String message) {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
+        try {
+            response.getWriter().printf("{\"message\":\"%s\"}", message);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
