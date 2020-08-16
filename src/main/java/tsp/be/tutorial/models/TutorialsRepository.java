@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
+import tsp.be.error.DataIntegrityValidationException;
 import tsp.be.error.SingleMessageValidationException;
 
 import java.util.ArrayList;
@@ -107,6 +108,17 @@ public class TutorialsRepository {
 		return tutorials;
 	}
 
+	public TutorialMetaData getTutorialMetaData(String tutorialID) {
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+
+		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", tutorialObjectID))
+				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"))
+				.first();
+		DBUtils.validateNotNull(tutorialDoc);
+
+		return tutorialDocToTutorialMetaData(tutorialDoc);
+	}
+
 	private TutorialMetaData tutorialDocToTutorialMetaData(Document tutorialDoc) {
 		TutorialMetaData tutorial = new TutorialMetaData();
 		tutorial.id = tutorialDoc.getObjectId("_id").toString();
@@ -118,29 +130,6 @@ public class TutorialsRepository {
 		tutorial.authorName = tutorialDoc.getString("authorName");
 
 		return tutorial;
-	}
-
-	private Double calculateAvgRating(Document rating) {
-		if (rating == null) return null;
-
-		int nOne = (int) rating.getOrDefault("one", 0);
-		int nTwo = (int) rating.getOrDefault("two", 0);
-		int nThree = (int) rating.getOrDefault("three", 0);
-		int nFour = (int) rating.getOrDefault("four", 0);
-		int nFive = (int) rating.getOrDefault("five", 0);
-
-		return  (1.0 * nOne + 2.0 * nTwo + 3.0 * nThree + 4.0 * nFour + 5.0 * nFive) / (nOne + nTwo + nThree + nFour + nFive);
-	}
-
-	public TutorialMetaData getTutorialMetaData(String tutorialID) {
-		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
-
-		Document tutorialDoc = tutorialsCollection.find(Filters.eq("_id", tutorialObjectID))
-				.projection(Projections.include("_id", "name", "description", "categoryID", "authorID", "authorName"))
-				.first();
-		DBUtils.validateNotNull(tutorialDoc);
-
-		return tutorialDocToTutorialMetaData(tutorialDoc);
 	}
 
 	public Tutorial getTutorialContents(String tutorialID) {
@@ -157,6 +146,18 @@ public class TutorialsRepository {
 		tutorial.chapters = extractChapters(tutorialDoc.getList("chapters", Document.class));
 
 		return tutorial;
+	}
+
+	private Double calculateAvgRating(Document rating) {
+		if (rating == null) return null;
+
+		int nOne = (int) rating.getOrDefault("one", 0);
+		int nTwo = (int) rating.getOrDefault("two", 0);
+		int nThree = (int) rating.getOrDefault("three", 0);
+		int nFour = (int) rating.getOrDefault("four", 0);
+		int nFive = (int) rating.getOrDefault("five", 0);
+
+		return  (1.0 * nOne + 2.0 * nTwo + 3.0 * nThree + 4.0 * nFour + 5.0 * nFive) / (nOne + nTwo + nThree + nFour + nFive);
 	}
 
 	private List<Chapter> extractChapters(List<Document> chapterDocs) {
@@ -187,49 +188,62 @@ public class TutorialsRepository {
 	}
 
 	public void addLesson(String tutorialID, String chapterID, String lessonID, String name) {
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+		ObjectId chapterObjectID = DBUtils.validateAndCreateObjectID(chapterID);
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
+
 		Document lessonMetaData = new Document();
-		lessonMetaData.append("_id", DBUtils.validateAndCreateObjectID(lessonID));
+		lessonMetaData.append("_id", lessonObjectID);
 		lessonMetaData.append("name", name);
 
 		UpdateResult result = tutorialsCollection.updateOne(
-				Filters.and(Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID)), Filters.eq("chapters._id", DBUtils.validateAndCreateObjectID(chapterID))),
+				Filters.and(Filters.eq("_id", tutorialObjectID), Filters.eq("chapters._id", chapterObjectID)),
 				Updates.push("chapters.$.lessons", lessonMetaData)
 		);
 
-		if(result.getModifiedCount() == 0)  throw new SingleMessageValidationException("Invalid tutorial and chapter");
+		if(result.getModifiedCount() == 0)  throw new DataIntegrityValidationException("Invalid tutorial and chapter");
 	}
 
 	public void updateLesson(String tutorialID, String chapterID, String lessonID, String name) {
-		List<Bson> arrayFilters = new ArrayList<>();
-		arrayFilters.add(Filters.eq("chapter._id", DBUtils.validateAndCreateObjectID(chapterID)));
-		arrayFilters.add(Filters.eq("lesson._id", DBUtils.validateAndCreateObjectID(lessonID)));
+		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
+		ObjectId chapterObjectID = DBUtils.validateAndCreateObjectID(chapterID);
+		ObjectId lessonObjectID = DBUtils.validateAndCreateObjectID(lessonID);
 
-		tutorialsCollection.updateOne(
-				Filters.eq("_id", DBUtils.validateAndCreateObjectID(tutorialID)),
+		List<Bson> arrayFilters = new ArrayList<>();
+		arrayFilters.add(Filters.eq("chapter._id", chapterObjectID));
+		arrayFilters.add(Filters.eq("lesson._id", lessonObjectID));
+
+		UpdateResult result = tutorialsCollection.updateOne(
+				Filters.eq("_id", tutorialObjectID),
 				Updates.set("chapters.$[chapter].lessons.$[lesson].name", name),
 				new UpdateOptions().arrayFilters(arrayFilters)
 		);
+
+		if(result.getModifiedCount() == 0)  throw new DataIntegrityValidationException("Invalid tutorial and chapter");
 	}
 
 	public void updateChapter(String tutorialID, String chapterID, String newName) {
 		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
 		ObjectId chapterObjectID = DBUtils.validateAndCreateObjectID(chapterID);
 
-		tutorialsCollection.updateOne(
+		UpdateResult result = tutorialsCollection.updateOne(
 				Filters.and(Filters.eq("_id", tutorialObjectID), Filters.eq("chapters._id", chapterObjectID)),
 				Updates.set("chapters.$.name", newName)
 		);
+
+		if(result.getModifiedCount() == 0)  throw new DataIntegrityValidationException("Invalid tutorial and chapter");
 	}
 
 	public void updateTutorial(String tutorialID, String categoryID, String name, String description) {
 		ObjectId tutorialObjectID = DBUtils.validateAndCreateObjectID(tutorialID);
 		ObjectId categoryObjectID = DBUtils.validateAndCreateObjectID(categoryID);
 
-		tutorialsCollection.updateOne(
+		UpdateResult result = tutorialsCollection.updateOne(
 				Filters.eq("_id", tutorialObjectID),
 				Updates.combine(Updates.set("name", name), Updates.set("description", description), Updates.set("categoryID", categoryObjectID))
 		);
 
+		if(result.getModifiedCount() == 0)  throw new DataIntegrityValidationException("Invalid tutorial");
 	}
 
 	public void addRating(String tutorialID, String rating) {
