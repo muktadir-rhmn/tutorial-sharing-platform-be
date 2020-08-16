@@ -21,6 +21,8 @@ public class CacheInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		if(request.getMethod().equals("OPTIONS")) return true; //for CORS
+
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 		if (!handlerMethod.hasMethodAnnotation(CacheAPIResponse.class)) return true;
 
