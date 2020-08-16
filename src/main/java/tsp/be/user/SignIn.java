@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import tsp.be.error.MappedValidationException;
 import tsp.be.error.SingleMessageValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.auth.TokenManager;
 import tsp.be.user.models.User;
 import tsp.be.user.models.UserRepository;
+import tsp.be.utils.Validator;
 
 import static tsp.be.user.MetaData.USER_MODULE_URL_PREFIX;
 
@@ -41,15 +43,20 @@ public class SignIn {
         return response;
     }
 
-    private void validate(SignInRequest signIn) {
+    private void validate(SignInRequest request) {
+        MappedValidationException exception = new MappedValidationException();
 
+        if (Validator.isInvalidEmail(request.email)) exception.addError("email", "Invalid email");
+        if (Validator.isEmptyString(request.password)) exception.addError("password", "Invalid password");
+
+        exception.throwIfAnyError();
     }
 
     private SignInResponse manageSignIn(SignInRequest signIn) {
         User user = userRepository.getUserByEmail(signIn.email);
         if (user == null || !user.password.equals(signIn.password)) throw new SingleMessageValidationException("Email & password does not match any account");
 
-        String token = tokenManager.generateToken(user.id, user.email, user.name);
+        String token = tokenManager.generateToken(user.id, user.email, user.name, user.userType);
 
         SignInResponse response = new SignInResponse();
         response.message = "Sign in successful";

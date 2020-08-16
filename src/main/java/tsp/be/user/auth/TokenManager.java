@@ -34,7 +34,7 @@ public class TokenManager {
                 .build();
     }
 
-    public String generateToken(String userID, String userEmail, String userName) {
+    public String generateToken(String userID, String userEmail, String userName, String userType) {
         String token = null;
         try {
             token = JWT.create()
@@ -42,6 +42,7 @@ public class TokenManager {
                     .withClaim("userID", userID)
                     .withClaim("userEmail", userEmail)
                     .withClaim("userName", userName)
+                    .withClaim("userType", userType)
                     .sign(signingAlgorithm);
         } catch (JWTCreationException exception){
             exception.printStackTrace();
@@ -60,9 +61,9 @@ public class TokenManager {
             String userID = claimMap.get("userID").asString();
             String userEmail = claimMap.get("userEmail").asString();
             String userName = claimMap.get("userName").asString();
+            String userType = claimMap.get("userType").asString();
 
-
-            return new UserDescriptor(userID, userEmail, userName);
+            return new UserDescriptor(userID, userEmail, userName, userType);
         } catch (JWTCreationException | JWTDecodeException exception){
             return null;
         }

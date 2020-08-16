@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tsp.be.hierarchy.models.HierarchyRepository;
+import tsp.be.user.UserDescriptor;
+import tsp.be.user.auth.RequireAccess;
 import tsp.be.utils.SingleMessageResponse;
 
 import static tsp.be.hierarchy.MetaData.HIERARCHY_ROOT_PATH;
@@ -22,6 +24,7 @@ public class UpdateCategory {
 	@Autowired
 	private HierarchyRepository hierarchyRepository;
 
+	@RequireAccess(UserDescriptor.USER_TYPE_ADMIN)
 	@PostMapping("/update-category")
 	public SingleMessageResponse updateCategory(@RequestBody UpdateCategoryRequest request) {
 		hierarchyRepository.updateCategory(request.idPath, request.name, request.parentIDPath);

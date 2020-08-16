@@ -2,6 +2,8 @@ package tsp.be.user.auth;
 
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import tsp.be.error.AccessDeniedException;
+import tsp.be.error.SingleMessageValidationException;
 import tsp.be.user.UserDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +26,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
         UserDescriptor userDescriptor = tokenManager.verifyTokenAndDecodeData(token);
 
-        if (userDescriptor == null) return false;
+        if (userDescriptor == null) throw new AccessDeniedException();
+
+        boolean hasAccess = handlerMethod.hasMethodAnnotation(RequireAccess.class) &&
+                userDescriptor.hasAccess(handlerMethod.getMethodAnnotation(RequireAccess.class).value());
+        if (!hasAccess) throw new AccessDeniedException();
 
         request.setAttribute("user", userDescriptor);
         return true;
