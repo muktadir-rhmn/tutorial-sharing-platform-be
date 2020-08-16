@@ -1,5 +1,7 @@
 package tsp.be.user.auth;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import tsp.be.user.UserDescriptor;
@@ -10,6 +12,8 @@ import java.io.IOException;
 
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
+    private Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+
     private TokenManager tokenManager = TokenManager.getInstance();
 
     @Override
@@ -18,7 +22,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 
         HandlerMethod handlerMethod = (HandlerMethod) handler;
 
-        System.out.println(request.getMethod() + " " + request.getRequestURL());
+        logger.info(request.getMethod() + " " + request.getRequestURL());
         if (handlerMethod.hasMethodAnnotation(SigninNotRequired.class)) return true;
 
         String token = request.getHeader("token");
