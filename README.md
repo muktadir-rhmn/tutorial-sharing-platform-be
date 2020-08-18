@@ -18,6 +18,24 @@ generating appropriate error response.
 - Cache Layer: If an API is set to be cached, this cache layer caches API response. Once cached, any further request to that API 
 will be served from the cache, until it expires. 
 
+## Resource Model
+I tried to follow REST. 
+
+The following collections represent the BE to FE:
+- /users
+- /hierarchy
+- /tutorials
+- /lessons
+- /comments
+- /notes
+- /markings
+- /evaluations
+
+Each item in any of the collections has a unique identifier. The path `/{collectionName}/{itemID}` represents an item of a collection.
+
+For example, each tutorial has a unique identifier. The path `/tutorials/5f312e48217a060239bfc782` represents a tutorial with ID `5f312e48217a060239bfc782`. 
+
+
 ## Stacks Used
 Programming Language: Java
 
