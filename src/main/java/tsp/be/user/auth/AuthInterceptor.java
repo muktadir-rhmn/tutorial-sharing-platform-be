@@ -30,14 +30,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         UserDescriptor userDescriptor = tokenManager.verifyTokenAndDecodeData(token);
 
         if (userDescriptor == null) {
-            addAccessDeniedResponse(response, "Sign in required to access this api");
+            addErrorResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Sign in required to access this api");
             return false;
         }
 
         boolean hasAccess = !handlerMethod.hasMethodAnnotation(RequireAccess.class) ||
                 userDescriptor.hasAccess(handlerMethod.getMethodAnnotation(RequireAccess.class).value());
         if (!hasAccess) {
-            addAccessDeniedResponse(response, "Permission denied");
+            addErrorResponse(response, HttpServletResponse.SC_FORBIDDEN, "Permission denied");
             return false;
         }
 
@@ -45,8 +45,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-    private void addAccessDeniedResponse(HttpServletResponse response, String message) {
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    private void addErrorResponse(HttpServletResponse response, int statusCode, String message) {
+        response.setStatus(statusCode);
         response.setContentType("application/json");
         try {
             response.getWriter().printf("{\"message\":\"%s\"}", message);
