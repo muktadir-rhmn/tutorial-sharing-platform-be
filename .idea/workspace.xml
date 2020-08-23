@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c12e7aca-dc0f-41bb-9f6b-e9c931be818b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/MetaData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/MetaData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/user/SignUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/user/SignUp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +240,12 @@
       <workItem from="1597681766985" duration="274000" />
       <workItem from="1597683192804" duration="257000" />
       <workItem from="1597688880952" duration="532000" />
-      <workItem from="1597737728953" duration="2724000" />
+      <workItem from="1597737728953" duration="4403000" />
+      <workItem from="1597834256207" duration="57000" />
+      <workItem from="1597845829241" duration="562000" />
+      <workItem from="1597850929583" duration="35000" />
+      <workItem from="1597852928158" duration="589000" />
+      <workItem from="1597861816688" duration="447000" />
     </task>
     <servers />
   </component>

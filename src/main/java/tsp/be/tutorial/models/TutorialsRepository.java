@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tsp.be.db.DBUtils;
 import tsp.be.db.DatabaseManager;
-import tsp.be.error.DataIntegrityValidationException;
-import tsp.be.error.SingleMessageValidationException;
+import tsp.be.error.exceptions.DataIntegrityValidationException;
+import tsp.be.error.exceptions.SingleMessageValidationException;
 
 import java.util.ArrayList;
 import java.util.Collections;

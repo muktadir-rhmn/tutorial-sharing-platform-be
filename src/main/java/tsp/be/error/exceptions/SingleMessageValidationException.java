@@ -1,4 +1,4 @@
-package tsp.be.error;
+package tsp.be.error.exceptions;
 
 public class SingleMessageValidationException extends ValidationException {
 

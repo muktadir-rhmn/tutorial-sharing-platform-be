@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import tsp.be.error.MappedValidationException;
+import tsp.be.error.exceptions.MappedValidationException;
 import tsp.be.user.auth.SigninNotRequired;
 import tsp.be.user.models.UserRepository;
 import tsp.be.utils.Validator;
@@ -41,6 +41,7 @@ public class SignUp {
     private void validate(SignUpRequest request) {
         MappedValidationException errors = new MappedValidationException();
 
+        //todo: add email syntax validation and already exists validation
         if (Validator.isEmptyString(request.email)) errors.addError("email", "Email is required");
         if (Validator.isEmptyString(request.name)) errors.addError("name", "User name is required");
         if (request.password == null || request.password.length() < 8) errors.addError("password", "Password must contain at least 8 characters");

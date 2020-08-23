@@ -2,7 +2,7 @@ package tsp.be.lesson;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tsp.be.error.MappedValidationException;
+import tsp.be.error.exceptions.MappedValidationException;
 import tsp.be.lesson.models.LessonsRepository;
 import tsp.be.utils.SingleMessageResponse;
 import tsp.be.utils.Validator;

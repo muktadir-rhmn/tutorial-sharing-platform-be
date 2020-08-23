@@ -2,7 +2,7 @@ package tsp.be.marker;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tsp.be.error.SingleMessageValidationException;
+import tsp.be.error.exceptions.SingleMessageValidationException;
 import tsp.be.marker.models.MarkingsRepository;
 import tsp.be.user.UserDescriptor;
 

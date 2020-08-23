@@ -2,7 +2,7 @@ package tsp.be.db;
 
 import org.bson.Document;
 import org.bson.types.ObjectId;
-import tsp.be.error.DataIntegrityValidationException;
+import tsp.be.error.exceptions.DataIntegrityValidationException;
 
 public class DBUtils {
 	public static void validateObjectID(String id) {

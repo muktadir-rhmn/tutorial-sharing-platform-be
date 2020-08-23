@@ -1,4 +1,4 @@
-package tsp.be.error;
+package tsp.be.error.exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
