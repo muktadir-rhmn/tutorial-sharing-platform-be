@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c12e7aca-dc0f-41bb-9f6b-e9c931be818b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/tsp/be/config/pojos/RedisConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/configurations/redis_config.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/cache/CacheManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/cache/CacheManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/tsp/be/config/ConfigurationManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/tsp/be/config/ConfigurationManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -248,7 +251,8 @@
       <workItem from="1597861816688" duration="447000" />
       <workItem from="1598214773807" duration="273000" />
       <workItem from="1598254965726" duration="15000" />
-      <workItem from="1598290270448" duration="778000" />
+      <workItem from="1598290270448" duration="1026000" />
+      <workItem from="1598298815082" duration="382000" />
     </task>
     <servers />
   </component>

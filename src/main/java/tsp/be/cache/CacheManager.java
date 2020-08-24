@@ -4,10 +4,19 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import tsp.be.config.ConfigurationManager;
+import tsp.be.config.pojos.RedisConfiguration;
 
 @Service
 class CacheManager {
-	private Jedis jedis = new Jedis("localhost");
+	private RedisConfiguration redisConfiguration;
+	private Jedis jedis;
+
+	public CacheManager() {
+		redisConfiguration = ConfigurationManager.getRedisConfiguration();
+
+		jedis = new Jedis(redisConfiguration.host, redisConfiguration.port);
+	}
 
 	public void set(String key, String value, int durationInSeconds) {
 		try{

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import tsp.be.config.pojos.DatabaseConfiguration;
 import tsp.be.config.pojos.JWTConfiguration;
+import tsp.be.config.pojos.RedisConfiguration;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,6 +22,11 @@ public class ConfigurationManager {
        String fileName = "jwt_config.json";
        return (JWTConfiguration) readConfigurationFromFile(configurationFileDirectory + fileName, JWTConfiguration.class);
    }
+
+    public static RedisConfiguration getRedisConfiguration() {
+        String fileName = "redis_config.json";
+        return (RedisConfiguration) readConfigurationFromFile(configurationFileDirectory + fileName, RedisConfiguration.class);
+    }
 
    private static Object readConfigurationFromFile(String filePath, Class outputClass) {
        try {
