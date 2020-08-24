@@ -35,6 +35,13 @@ Each item in any of the collections has a unique identifier. The path `/{collect
 
 For example, each tutorial has a unique identifier. The path `/tutorials/5f312e48217a060239bfc782` represents a tutorial with ID `5f312e48217a060239bfc782`. 
 
+## Scalability
+No request-specific data is stored in this application. As a result, we can run as many instance of this application as we want --
+we just have to add a load balancer for balancing the load among the instances. 
+
+In case of database, we can use a MongoDB cluster. In case of cache, we can easily use a Redis cluster.
+
+So, this application is easily scalable.
 
 ## Stacks Used
 Programming Language: Java
